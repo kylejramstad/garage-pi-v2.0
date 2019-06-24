@@ -1,6 +1,3 @@
-# JetBrains ish
-.idea
-
 # Definitely don't want to check in node_modules folder
 node_modules
 
