@@ -1,26 +1,47 @@
 {
   "name": "garage_pi",
-  "version": "1.0.0",
-  "description": "Web endpoint to manage garage-pi",
-  "author": "Tyler Jones <tyler@howchoo.com>",
+  "version": "2.0.0",
+  "description": "Web endpoint to manage garage-pi. Original code by Tyler Jones <tyler@howchoo.com>",
+  "author": "Kyle Ramstad",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "axios": "",
-    "babel-core": "",
+    "@babel/core": "",
     "babel-loader": "",
-    "babel-preset-es2015": "",
-    "babel-preset-react": "",
-    "css-loader": "",
+    "@babel/preset-env": "",
+    "@babel/preset-react": "",
+    "body-parser": "^1.19.0",
     "ejs": "",
     "express": "^4.13.3",
-    "node-sass": "",
+    "express-favicon": "^2.0.1",
+    "express-session": "^1.16.1",
+    "helmet": "^3.18.0",
+    "https": "^1.0.0",
+    "owasp-password-strength-test": "",
     "react": "",
     "react-dom": "",
     "rpio": "",
-    "sass-loader": "",
-    "style-loader": ""
-  }
+    "simple-json-db": "1.2.1",
+    "session-file-store": "",
+    "webpack": "",
+    "webpack-cli": ""
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kylejramstad/garage-pi-v2.0.git"
+  },
+  "keywords": [
+    "garage",
+    "raspberry",
+    "pi"
+  ],
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/kylejramstad/garage-pi-v2.0/issues"
+  },
+  "homepage": "https://github.com/kylejramstad/garage-pi-v2.0#readme"
 }
