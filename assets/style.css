@@ -1,0 +1,94 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+.page {
+  width: 80%;
+  padding: 8% 0 0;
+  margin: auto;
+}
+.content {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 0 auto 30px;
+  padding: 20px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.content input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 10px;
+  padding: 12px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+button {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #00CED1;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #000000;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+button:hover,button:active,button:focus {
+  background: #20B2AA;
+}
+.message {
+  margin: 15px 0 0;
+  color: #b3b3b3;
+  font-size: 12px;
+}
+.message a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+body {
+  background: #20B2AA; /* fallback for old browsers */
+  background: -webkit-linear-gradient(right, #20B2AA, #40E0D0);
+  background: -moz-linear-gradient(right, #20B2AA, #40E0D0);
+  background: -o-linear-gradient(right, #20B2AA, #40E0D0);
+  background: linear-gradient(to left, #20B2AA, #40E0D0);
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;      
+}
+.state p{
+  font-weight: bold;
+  font-size: 1.5em;
+  text-align: center;
+}
+.isa_success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    margin: 10px 0px;
+    padding:12px;
+  }
+.isa_error {
+    color: #D8000C;
+    background-color: #FFD2D2;
+    margin: 10px 0px;
+    padding:12px;
+  }
+#log {
+	margin: 0 auto;
+}
+.right {
+    text-align: right;
+    float: right;
+}
+.left {
+    text-align: left;
+    float: left;
+}
+a:visited{
+  color:blue;
+}

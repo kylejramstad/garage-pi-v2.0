@@ -1,3 +1,4 @@
+
 module.exports = {
   entry: [
     './entry.js'
@@ -7,21 +8,13 @@ module.exports = {
     filename: 'bundle.js'
   },
   module: {
-    loaders: [
-      {
-        test: /\.scss$/,
-        loaders: ['style-loader', 'css-loader', 'sass-loader']
-      },
-      {
-        test: /\.css$/,
-        loader: 'style!css'
-      },
+    rules: [
       {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
-        query: {
-          presets: ['react', 'es2015']
+        options: {
+          presets: ['@babel/react', '@babel/preset-env']
         }
       }
     ]
