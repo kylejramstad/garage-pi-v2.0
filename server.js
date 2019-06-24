@@ -2,10 +2,45 @@
 
 const express = require('express');
 const rpio = require('rpio');
+const https = require('https');
+const fs = require('fs')
+const favicon = require('express-favicon');
+const login = require('./login.js');
+const log = require('./log.js');
+const crypto = require('crypto');
+const helmet = require('helmet')
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
+const bodyParser = require('body-parser');
+const owasp = require('owasp-password-strength-test');
+
 
 const app = express();
-const PORT = 80;
 
+//Middleware//
+app.use(favicon(__dirname + '/assets/icons/icon-72x72.png'));
+app.use(helmet.noCache())
+app.use(session({
+	store: new FileStore,
+    secret: 'D0-y0u-think-anyone-can-guess',
+    resave: true,
+    saveUninitialized: false,
+    cookie: { maxAge: 31536000000 }
+}));
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+
+// Authentication and Authorization Middleware
+var auth = function(req, res, next) {
+  if (req.session && req.session.admin) //if signed in then continue
+    return next();
+  else
+    return res.redirect('/login'); //redirect to login page
+};
+
+
+// RPIO PIN Config
 // default: 13-close, 19-open, 11-relay
 const openPin = process.env.OPEN_PIN || 19;
 const closePin = process.env.CLOSE_PIN || 13;
@@ -16,30 +51,194 @@ rpio.open(closePin, rpio.INPUT, rpio.PULL_UP);
 rpio.open(relayPin, rpio.OUTPUT, rpio.HIGH);
 
 
+//Endpoints
+app.get('/', auth, function(req, res) {
+        res.render('index.ejs', {log: log.getLogs(),create:req.session.create,deleted:req.session.deleted});
+        req.session.create = false;
+        req.session.deleted = false;
+        req.session.save();
+});
+
+app.get('/settings', auth, function(req, res) {
+    res.render('settings.ejs');
+});
+
+app.get('/settings/cert', auth, function(req, res) {
+    res.render('certDownload.ejs');
+});
+
+app.get('/settings/cert/download', auth, function(req, res){
+  	const file = __dirname + '/ssl/server.cer';
+  	res.download(file,'certificate.cer');
+});
+
+app.get('/login',function(req, res){ //does not use the auth() middleware because users seeing this page are most likely not signed in anyway
+    if (req.session && req.session.admin){ //Already signed in. Go to main page
+    	res.redirect('/');
+    }
+    else{ //Not signed in
+    	if(login.isFirst()){ //First time going to the site. Go to create the first user
+			res.redirect('/settings/users?type=create');
+    	}
+    	else{
+    		if(req.query.logout == 'true'){ //Just got sent to the login page because user logged out
+     			res.render('login.ejs', {logout: true});
+  			}
+  			else{
+     			res.render('login.ejs'); //User needs to login
+  			}
+    	}
+    }
+});
+
+app.post('/login', function(req, res) { //Check if username exists then if password matches to the username, otherwise show error to user
+    var username = req.body.username;
+	if(login.getUser(username)){
+    	//Username exists
+       	var password = req.body.password;
+       	var salt = login.getUser(username).salt;
+       	var hash = crypto.pbkdf2Sync(password, salt+username, 1000, 64, `sha512`).toString(`hex`);
+      	if(login.getUser(username).hash == hash){
+      		//Correct Password
+         	req.session.user = username; 
+         	req.session.admin = true;
+         	req.session.save();
+         	res.redirect('/');
+       	}
+       	else{
+       		//Password wrong
+        	res.render('login.ejs', {error: true});
+       	}
+    }
+    else{
+    	//Username does not exist
+    	res.render('login.ejs', {error: true});
+    }
+});
+
+app.get('/settings/users', function(req, res){ //does not use the auth() middleware so we can check for first login as well
+	if ((req.session && req.session.admin) || login.isFirst()){ // If logged in or first time user
+		if(req.query.type == 'create'){
+			res.render('userCreate.ejs');
+		}
+		else if(req.query.type == 'delete'){
+			res.render('userDelete.ejs');
+		}
+		else{
+			res.redirect('/'); //logged in user when to /users without any query
+		}
+	}
+	else{
+		res.redirect('/login'); // not signed in or first time user
+	}
+});
+
+app.post('/settings/users', function(req, res){ //Create the user from the form then redirect the user
+	if ((req.session && req.session.admin) || login.isFirst()){ // If logged in or first time user
+		if(req.query.type == 'create'){
+		    var username = req.body.username;
+			if(!login.getUser(username)){ //Create new user as long as the user doesn't exist 
+                var password = req.body.password;                 
+                var result = owasp.test(password);
+            	if(result.strong){ //user made a strong password
+                	login.addUser(username,password);
+                    req.session.create = true;
+                    req.session.save();
+                    res.redirect('/');
+                }
+                else{ //user made a weak password. Reload the page and show the requirements they didn't meet
+                    res.render('userCreate.ejs', {errors: result.errors});
+                }
+            }
+            else{ //User already exists
+            	res.render('userCreate.ejs', {exists: true});
+            }
+		}
+		else if(req.query.type == 'delete'){
+			var username1 = req.body.username1;
+        	var username2 = req.body.username2;
+        	if(username1 == username2 && username1 != req.session.user && username2 != req.session.user){
+        		login.deleteUser(username1);
+                req.session.deleted = true;
+            	req.session.save();
+            	res.redirect('/');
+        	}
+        	else{
+        		res.render('userDelete.ejs', {error: true});
+        	}
+		}
+		else{
+			res.redirect('/'); //logged in user when to /users without any query
+		}
+	}
+	else{
+		res.redirect('/login'); // not signed in or first time user
+	}
+});
+ 
+app.get('/logout', auth, function (req, res) { // Logout by destroying the session 
+  req.session.destroy();
+  res.redirect('/login?logout=true')
+});
+
+app.get('/google', function(req, res) { //Google Assistant API Call. Used with IFTTT
+	var username = req.query.username;
+	if(login.getUser(username)){
+	    var password = req.query.password;
+	    var salt = login.getUser(username).salt;
+	    var hash = crypto.pbkdf2Sync(password, salt+username, 1000, 64, `sha512`).toString(`hex`);
+	    if(login.getUser(username).hash == hash && ((req.query.open && !rpio.read(closePin))||(req.query.close && !rpio.read(openPin)))){
+			
+			log.addLog(username);
+	
+	        rpio.write(relayPin, rpio.LOW);
+	        setTimeout(function() {
+	            rpio.write(relayPin, rpio.HIGH);
+	            res.send('done');
+	        }, 1000);
+	
+	    }
+	}
+});
+
+
+//API calls
+app.get('/status', auth, function(req, res) { //For the react components to read the GPIO PINS
+  res.send(JSON.stringify(getState()));
+});
+
 function getState() {
   return {
     open: !rpio.read(openPin),
     close: !rpio.read(closePin)
   }
 }
-app.get('/', function(req, res) {
-  res.render('index.ejs');
+
+app.get('/relay', auth, function(req, res) {   //Open or Close garage with the relay
+   	var username = req.session.user;
+   	
+   	log.addLog(username);
+
+  	// Simulate a button press
+  	rpio.write(relayPin, rpio.LOW);
+  	setTimeout(function() {
+    	rpio.write(relayPin, rpio.HIGH);
+    	res.send('done');
+  	}, 1000);
 });
 
-app.get('/status', function(req, res) {
-  res.send(JSON.stringify(getState()));
-});
-
-app.get('/relay', function(req, res) {
-  // Simulate a button press
-  rpio.write(relayPin, rpio.LOW);
-  setTimeout(function() {
-    rpio.write(relayPin, rpio.HIGH);
-    res.send('done');
-  }, 1000);
-});
-
-
-app.listen(PORT);
+//give pages access to the assets folder for JS and CSS files
 app.use('/assets', express.static('assets'))
-console.log('Running on http://localhost:' + PORT);
+
+//To catch all false routes and redirect them back to the home page
+app.use(function(req, res, next){
+    res.status(404).redirect('/');
+});
+
+//Start App with HTTPS
+https.createServer({
+  key: fs.readFileSync('ssl/server.key'),
+  cert: fs.readFileSync('ssl/server.cer')
+}, app).listen(443, () => {
+  console.log('Listening...')
+})
