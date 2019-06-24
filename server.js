@@ -53,10 +53,15 @@ rpio.open(relayPin, rpio.OUTPUT, rpio.HIGH);
 
 //Endpoints
 app.get('/', auth, function(req, res) {
-        res.render('index.ejs', {log: log.getLogs(),create:req.session.create,deleted:req.session.deleted});
-        req.session.create = false;
-        req.session.deleted = false;
-        req.session.save();
+	var create = false;
+	var deleted = false;
+	if(req.query.create == 'true'){
+		create = true;
+	}
+	if(req.query.deleted == 'true'){
+		deleted = true;
+	}
+    res.render('index.ejs', {log: log.getLogs(),create:create,deleted:deleted});
 });
 
 app.get('/settings', auth, function(req, res) {
@@ -142,9 +147,7 @@ app.post('/settings/users', function(req, res){ //Create the user from the form 
                 var result = owasp.test(password);
             	if(result.strong){ //user made a strong password
                 	login.addUser(username,password);
-                    req.session.create = true;
-                    req.session.save();
-                    res.redirect('/');
+                    res.redirect('/?create=true');
                 }
                 else{ //user made a weak password. Reload the page and show the requirements they didn't meet
                     res.render('userCreate.ejs', {errors: result.errors});
@@ -159,9 +162,7 @@ app.post('/settings/users', function(req, res){ //Create the user from the form 
         	var username2 = req.body.username2;
         	if(username1 == username2 && username1 != req.session.user && username2 != req.session.user){
         		login.deleteUser(username1);
-                req.session.deleted = true;
-            	req.session.save();
-            	res.redirect('/');
+            	res.redirect('/?deleted=true');
         	}
         	else{
         		res.render('userDelete.ejs', {error: true});

@@ -1,6 +1,14 @@
-# garage-pi
+# garage-pi-v2
 
 Control your garage door using a web application running on your Raspberry Pi.
 
-## Setup
-You can find the full setup instructions [on howchoo](https://howchoo.com/g/yznmzmuxywu/how-to-control-your-garage-door-from-your-phone-using-a-raspberry-pi).
+## Original Setup
+You can find the original setup instructions [on howchoo](https://howchoo.com/g/yznmzmuxywu/how-to-control-your-garage-door-from-your-phone-using-a-raspberry-pi).
+
+## Setup for V2
+More to come
+
+## TODO
+[ ] Let users change their password
+[ ] Write setup instructions
+[ ] Allow for multiple garage door openers

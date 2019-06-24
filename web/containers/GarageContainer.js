@@ -13,16 +13,20 @@ class GarageContainer extends Component {
     this.updateStatus = this.updateStatus.bind(this);
     this.sendRelay = this.sendRelay.bind(this);
     this.getGarageStatus = this.getGarageStatus.bind(this);
-  }
+     }
 
-  componentDidMount() {
-    this.updateStatus();
-  }
+componentDidMount() {
+  this.interval = setInterval(() => this.setState({ time: this.updateStatus() }), 1000);
+}
+componentWillUnmount() {
+  clearInterval(this.interval);
+}
 
   updateStatus() {
     axios.get('/status')
       .then(res => {
         this.setState({ garageState: res.data });
+//	console.log(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -45,8 +49,10 @@ class GarageContainer extends Component {
     if (!garageState) {
       return '';
     }
-
-    if (garageState.open) {
+    
+    if (garageState.open && garageState.close){
+      return 'Garage Door Fell Off!!!!';
+    } else if (garageState.open) {
       return 'Open';
     } else if (garageState.close) {
       return 'Closed';
@@ -61,7 +67,7 @@ class GarageContainer extends Component {
     return (
       <div>
         <GarageState getGarageStatus={this.getGarageStatus} />
-        <GarageButton
+        <GarageButton 
           buttonText={garageState.open ? 'Close' : 'Open'}
           sendRelay={this.sendRelay} />
       </div>
