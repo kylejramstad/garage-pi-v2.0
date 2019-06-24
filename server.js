@@ -129,6 +129,9 @@ app.get('/settings/users', function(req, res){ //does not use the auth() middlew
 		else if(req.query.type == 'delete'){
 			res.render('userDelete.ejs');
 		}
+		else if(req.query.type == 'change'){
+			res.render('userChange.ejs');
+		}
 		else{
 			res.redirect('/'); //logged in user when to /users without any query
 		}
@@ -167,6 +170,29 @@ app.post('/settings/users', function(req, res){ //Create the user from the form 
         	else{
         		res.render('userDelete.ejs', {error: true});
         	}
+		}
+		else if(req.query.type == 'change'){
+			var username = req.session.user;
+			var passwordOriginal = req.body.passwordOriginal;
+			var passwordNew1 = req.body.passwordNew1;
+			var passwordNew2 = req.body.passwordNew2;
+			
+	       	var salt = login.getUser(username).salt;
+    	   	var hashCheck = crypto.pbkdf2Sync(passwordOriginal, salt+username, 1000, 64, `sha512`).toString(`hex`);
+
+			if(login.getUser(username).hash == hashCheck && passwordNew1 == passwordNew2){ //Create new user as long as the user doesn't exist                  
+                var result = owasp.test(passwordNew1);
+            	if(result.strong){ //user made a strong password
+                	login.changeUser(username,passwordNew1);
+                    res.redirect('/?change=true');
+                }
+                else{ //user made a weak password. Reload the page and show the requirements they didn't meet
+                    res.render('userChange.ejs', {errors: result.errors});
+                }
+            }
+            else{
+            	res.render('userChange.ejs', {error: true});
+            }
 		}
 		else{
 			res.redirect('/'); //logged in user when to /users without any query

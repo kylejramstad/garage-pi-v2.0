@@ -40,4 +40,8 @@ var deleteUser = function(user){
 	}
 }
 
-module.exports = {addUser,getUser,isFirst,deleteUser}
+var changeUser = function(user,pass){
+	addUser(user,pass);
+}
+
+module.exports = {addUser,getUser,isFirst,deleteUser,changeUser}

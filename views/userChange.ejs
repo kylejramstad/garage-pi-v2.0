@@ -23,7 +23,7 @@
   
   <div class="content">
   	<%if(typeof error != "undefined" && error == true){%>
-       <div class="isa_error">Current password is incorrect</div>
+       <div class="isa_error">Current password is incorrect or new passwords do not match</div>
     <%}%>
     
     <%if(typeof errors != "undefined"){%>
@@ -37,10 +37,10 @@
     <%}%>
     
     <form class="login-form" method="post">
-      <input type="password" name="password1" placeholder="old password"/>
-      <input type="password" name="password2" placeholder="new password"/>
-      <input type="password" name="password3" placeholder="verify new password"/>
-      <button>Create User</button>
+      <input type="password" name="passwordOriginal" placeholder="old password"/>
+      <input type="password" name="passwordNew1" placeholder="new password"/>
+      <input type="password" name="passwordNew2" placeholder="verify new password"/>
+      <button>Change Password</button>
     </form>
     
   </div>
