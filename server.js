@@ -142,7 +142,7 @@ app.post('/settings/users', function(req, res){ //Create the user from the form 
 	if ((req.session && req.session.admin) || login.isFirst()){ // If logged in or first time user
 		if(req.query.type == 'create'){
 		    var username = req.body.username;
-			if(!login.getUser(username)){ //Create new user as long as the user doesn't exist 
+			if(!login.getUser(username) && username != "first" ){ //Create new user as long as the user doesn't exist 
                 var password = req.body.password;                 
                 var result = owasp.test(password);
             	if(result.strong){ //user made a strong password
@@ -160,7 +160,7 @@ app.post('/settings/users', function(req, res){ //Create the user from the form 
 		else if(req.query.type == 'delete'){
 			var username1 = req.body.username1;
         	var username2 = req.body.username2;
-        	if(username1 == username2 && username1 != req.session.user && username2 != req.session.user){
+        	if(username1 == username2 && username1 != req.session.user && username2 != req.session.user && username1 != "first"){
         		login.deleteUser(username1);
             	res.redirect('/?deleted=true');
         	}

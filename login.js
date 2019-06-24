@@ -9,20 +9,25 @@ var genRandomString = function(length){
 };
 
 var addUser = function(user,pass) {
-	const username = user;
-	const password = pass;
-	const salt_gen = genRandomString(64);
-	const hash_gen = crypto.pbkdf2Sync(password, salt_gen+username, 1000, 64, `sha512`).toString(`hex`);
+	if(user != "first"){
+		const username = user;
+		const password = pass;
+		const salt_gen = genRandomString(64);
+		const hash_gen = crypto.pbkdf2Sync(password, salt_gen+username, 1000, 64, `sha512`).toString(`hex`);
 	
-	db.set(username,{salt:salt_gen,hash:hash_gen});
-	if(db.get('first')){
-		db.set('first',false);
+		db.set(username,{salt:salt_gen,hash:hash_gen});
+		if(db.get('first')){
+			db.set('first',false);
+		}
+  		db.sync();
 	}
-  	db.sync();
 }
 
 var getUser = function(user){
-  return db.get(user);
+  if(user != "first"){
+  	return db.get(user);
+  }
+  	return false;
 }
 
 var isFirst = function(){
@@ -30,7 +35,7 @@ var isFirst = function(){
 }
 
 var deleteUser = function(user){
-	if(db.has(user)){
+	if(db.has(user) && user != "first"){
 		db.delete(user);	
 	}
 }
