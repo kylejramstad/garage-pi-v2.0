@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Garage Pi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="./assets/style.css">
+<link rel="manifest" href="./assets/manifest.json">
+</head>
+<body>
+
+<div class="page">
+  <div class="content">
+
+    <%if(typeof error != "undefined" && error == true){%>
+       <div class="isa_error">Wrong Username/Password</div>
+    <%}%>
+
+    <%if(typeof logout != "undefined" && logout == true){%>
+       <div class="isa_success">You Have Successfully Logged Out</div>
+    <%}%>
+
+
+
+    <form class="login-form" method="post">
+      <input type="text" name="username" placeholder="username"/>
+      <input type="password" name="password" placeholder="password"/>
+      <button>login</button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
+
+

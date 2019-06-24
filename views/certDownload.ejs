@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Garage Pi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+
+<div class="page">
+
+  <div class="content" style="max-width:500px">
+	
+	  
+<div style="display:block; overflow: auto;">
+        <form class="left" action="/settings">
+                <input type="submit" value="Back" />
+        </form>
+</div>
+	
+	
+	<p>
+	Use of this SSL/TLS certificate is important when Garage-Pi is exposed to the public internet. 
+	Although I have added secure sessions/login, the session cookie could easily be stolen without the use of SSL/TLS.
+	<br><br>
+	The Garage-Pi certificate is not issued by a Certificate Authority (CA) because they will only issue certificates for domain names. 
+	It is assumed that most people will not be pointing their own domain at Garage-Pi. 
+	The self-signed certificate that Garage-Pi uses is not trusted by your browser and therefore needs to be installed.
+	<br><br>
+	<a href="/settings/cert/download">Download SSL/TLS Certificate</a><br><br>
+After you download the certificate, please install it in your local root store. 
+	This will allow you to access Garage-Pi securely without have those annoying invalid cert pages.
+	</p>
+	
+  </div>
+	
+  <div class="content" style="max-width:500px">
+	If you have a static IP address and have a domain pointed at it, you can install it by following these directions:
+	<ol>
+		<li>Copy your certificate and key to the raspberry pi. Using terminal:</li>
+			<ul>
+				<li>scp /path/to/local/file pi@192.168.1.1:/home/pi</li>
+				<li>Note: your raspberry pi might have a different IP address!</li>
+			</ul>
+		<li>You will then need to SSH into your raspberry pi</li>
+			<ul>
+				<li>sudo ssh pi@192.168.1.1</li>
+			</ul>
+		<li>Then you will need to copy the certificates and key to the docker container.</li>
+			<ul>
+				<li>sudo docker cp certificate.cer garage-pi:/code/ssl/server.cer</li>
+				<li>sudo docker cp certificate.key garage-pi:/code/ssl/server.key</li>
+				<li>Note: The files must be named "server.cer" and "server.key" and in the /code/ssl folder on the garage-pi container.</li>
+			</ul>
+		<li>Finally, you need to restart the garage-pi container.</li>
+			<ul>
+				<li>sudo docker container restart garage-pi</li>
+			</ul>
+	</ol>
+  </div>
+</div>
+
+</body>
+</html>
+
+
