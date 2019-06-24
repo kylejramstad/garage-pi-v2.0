@@ -163,7 +163,7 @@ app.post('/settings/users', function(req, res){ //Create the user from the form 
 		else if(req.query.type == 'delete'){
 			var username1 = req.body.username1;
         	var username2 = req.body.username2;
-        	if(username1 == username2 && username1 != req.session.user && username2 != req.session.user && username1 != "first"){
+        	if(login.getUser(username) && username1 == username2 && username1 != req.session.user && username2 != req.session.user && username1 != "first"){
         		login.deleteUser(username1);
             	res.redirect('/?deleted=true');
         	}

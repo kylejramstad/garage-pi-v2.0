@@ -9,5 +9,4 @@ You can find the original setup instructions [on howchoo](https://howchoo.com/g/
 More to come
 
 ## TODO
-[ ] Write setup instructions
 [ ] Allow for multiple garage door openers
