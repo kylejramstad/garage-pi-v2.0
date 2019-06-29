@@ -121,6 +121,22 @@ app.post('/login', function(req, res) { //Check if username exists then if passw
     }
 });
 
+app.get('/settings/logs', auth, function(req, res){
+	res.render('logs.ejs');
+});
+
+app.post('/settings/logs', auth, function(req, res){
+	var number = parseInt(req.body.number, 10);
+	
+	if(!(number < 0 || number > 1000)){
+		log.setSize(number);
+		res.render('logs.ejs', {success: true});
+	}
+	else{
+		res.render('logs.ejs', {error: true});
+	}
+});
+
 app.get('/settings/users', function(req, res){ //does not use the auth() middleware so we can check for first login as well
 	if ((req.session && req.session.admin) || login.isFirst()){ // If logged in or first time user
 		if(req.query.type == 'create'){
@@ -146,14 +162,20 @@ app.post('/settings/users', function(req, res){ //Create the user from the form 
 		if(req.query.type == 'create'){
 		    var username = req.body.username;
 			if(!login.getUser(username) && username != "first" ){ //Create new user as long as the user doesn't exist 
-                var password = req.body.password;                 
+                var password = req.body.password;  
+                var password2 = req.body.password2;               
                 var result = owasp.test(password);
-            	if(result.strong){ //user made a strong password
-                	login.addUser(username,password);
-                    res.redirect('/?create=true');
+                if(password == password2){ //must match
+					if(result.strong){ //user made a strong password
+                		login.addUser(username,password);
+                    	res.redirect('/?create=true');
+                	}
+                	else{ //user made a weak password. Reload the page and show the requirements they didn't meet
+                    	res.render('userCreate.ejs', {errors: result.errors});
+                	}
                 }
-                else{ //user made a weak password. Reload the page and show the requirements they didn't meet
-                    res.render('userCreate.ejs', {errors: result.errors});
+                else{//did not match
+                	res.render('userCreate.ejs', {errors: ["Passwords Must Match"]});
                 }
             }
             else{ //User already exists
