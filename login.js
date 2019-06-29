@@ -44,4 +44,4 @@ var changeUser = function(user,pass){
 	addUser(user,pass);
 }
 
-module.exports = {addUser,getUser,isFirst,deleteUser,changeUser}
+module.exports = {addUser,getUser,isFirst,deleteUser,changeUser, genRandomString}

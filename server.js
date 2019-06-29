@@ -137,6 +137,17 @@ app.post('/settings/logs', auth, function(req, res){
 	}
 });
 
+app.get('/settings/assistant', auth, function(req, res){
+	res.render('assistant.ejs');
+});
+
+app.post('/settings/assistant', auth, function(req, res){
+	var username = "assistant";
+	var password = login.genRandomString(15);
+	login.addUser(username,password);
+	res.render('assistant.ejs', {username: username, password: password});
+});
+
 app.get('/settings/users', function(req, res){ //does not use the auth() middleware so we can check for first login as well
 	if ((req.session && req.session.admin) || login.isFirst()){ // If logged in or first time user
 		if(req.query.type == 'create'){
@@ -230,7 +241,7 @@ app.get('/logout', auth, function (req, res) { // Logout by destroying the sessi
   res.redirect('/login?logout=true')
 });
 
-app.get('/google', function(req, res) { //Google Assistant API Call. Used with IFTTT
+app.get('/assistant', function(req, res) { //Google Assistant API Call. Used with IFTTT
 	var username = req.query.username;
 	if(login.getUser(username)){
 	    var password = req.query.password;
