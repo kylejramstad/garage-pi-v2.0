@@ -38,13 +38,14 @@
 <div class="content" id="log">
 <table border="2">
 <tbody>
-<tr><td>Username</td><td>Date</td><td>Time</td></tr>
+<tr><td>Open/Close</td><td>Username</td><td>Date</td><td>Time</td></tr>
 
 <% for(var i = 0 ; i < log.length ; i++) { %>
        <tr>
             <td><%= log[i][0] %></td>
             <td><%= log[i][1] %></td>
             <td><%= log[i][2] %></td>
+            <td><%= log[i][3] %></td>
        </tr>
 <% } %>
 

@@ -126,14 +126,19 @@ app.get('/settings/logs', auth, function(req, res){
 });
 
 app.post('/settings/logs', auth, function(req, res){
-	var number = parseInt(req.body.number, 10);
-	
-	if(!(number < 0 || number > 1000)){
-		log.setSize(number);
-		res.render('logs.ejs', {success: true});
+	if(typeof req.body.number != "undefined"){
+		var number = parseInt(req.body.number, 10);
+		if(!(number < 0 || number > 1000)){
+			log.setSize(number);
+			res.render('logs.ejs', {success: true});
+		}
+		else{
+			res.render('logs.ejs', {error: true});
+		}
 	}
 	else{
-		res.render('logs.ejs', {error: true});
+		log.resetLogs();
+		res.render('logs.ejs', {reset: true});
 	}
 });
 
@@ -251,7 +256,12 @@ app.get('/assistant', function(req, res) { //Google Assistant API Call. Used wit
 	    var hash = crypto.pbkdf2Sync(password, salt+username, 1000, 64, `sha512`).toString(`hex`);
 	    if(login.getUser(username).hash == hash && ((req.query.open && getState().close)||(req.query.close && getState().open))){
 			
-			log.addLog(username);
+			if(req.query.close){
+				log.addLog("Close",username);	
+			}
+			else if(req.query.open){
+				log.addLog("Open",username);	
+			}
 	
 	        rpio.write(relayPin, rpio.LOW);
 	        setTimeout(function() {
@@ -285,8 +295,11 @@ function buttonCheck(){
 	var newState = getState();
 	check = setInterval(function (){
 		newState = getState();
-		if((startState.open && !newState.open) || (startState.close && !newState.close)){
-			log.addLog('Button Push');
+		if(startState.open && !newState.open){
+			log.addLog("Close",'Button Push');
+		}
+		else if(startState.close && !newState.close){
+			log.addLog("Open",'Button Push');
 		}
 		startState = getState();
 	},100);
@@ -297,7 +310,15 @@ app.get('/relay', auth, function(req, res) {   //Open or Close garage with the r
         
    	var username = req.session.user;
    	
-   	log.addLog(username);
+   	if(getState().open){
+		log.addLog("Close",username);
+	}
+	else if(getState().close){
+		log.addLog("Open",username);
+	}
+	else{
+		log.addLog("",username); //just in case the garage was half open/close, we still want to log this
+	}
 
   	// Simulate a button press
   	rpio.write(relayPin, rpio.LOW);

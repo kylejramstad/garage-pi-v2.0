@@ -32,8 +32,19 @@
     <%}%>
     
     <form class="login-form" method="post">
-		<input type="number" name="number" min="0" max="1000">
+		<input type="number" name="number" min="0" max="1000" placeholder="Enter a Number">
       	<button>Change Log</button>
+    </form>
+  </div>    
+  
+  <div class="content">	 
+  	 <%if(typeof reset != "undefined" && reset == true){%>
+       <div class="isa_success">Logs have been reset</div>
+    <%}%>
+  
+  	<p><strong>This will erase all your logs</strong></p>
+    <form class="login-form" method="post">
+      	<button>Reset Logs</button>
     </form>
     
   </div>

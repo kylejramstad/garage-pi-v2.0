@@ -2,8 +2,7 @@ const JSONdb = require('simple-json-db');
 const db = new JSONdb('./databases/logs.json');
 const crypto = require("crypto");
 
-var addLog = function(user) {
-	var username = user;
+var addLog = function(open,user) {
 	var id = crypto.randomBytes(20).toString('hex'); //Makes a random event id so that we have unique entries in our log
   	var today = new Date();
  	var date = (today.getMonth()+1)+'-'+today.getDate()+'-'+today.getFullYear();
@@ -21,7 +20,7 @@ var addLog = function(user) {
  	
   	var time = hours + ":" + minutes + ":" + seconds;
 	
-	db.set(id,[username,date,time]);
+	db.set(id,[open,user,date,time]);
   	db.sync();
   	adjustLog();
 }
@@ -65,4 +64,10 @@ var getSize = function(){
 	return db.get("size");
 }
 
-module.exports = {addLog,getLogs,setSize}
+var resetLogs = function(){
+	var size = getSize();
+	setSize(0); //deletes all logs
+	setSize(size); //resets size back to what it was
+}
+
+module.exports = {addLog,getLogs,setSize,resetLogs}

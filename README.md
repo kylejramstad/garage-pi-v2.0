@@ -71,6 +71,8 @@ Otherwise, you should setup a VPN in your home and tunnel into it before accessi
 - [x] Style the pages using some new CSS (make it look pretty)
 - [x] Add some basic PWA components for android phones
 - [x] Users have a log of when the garage opens from pressing the garage button.
+- [x] Add "open" or "close" to logs
+- [x] Add setting to delete logs
 - [ ] Add PWA components for iOS compatibility
 - [ ] Allow for multiple garage door openers
 - [ ] Add instructions on how to change SSL/TLS Cert to match the user's IP address
