@@ -45,7 +45,7 @@ You can find instuctions on [How to set up your Raspberry Pi without a keyboard,
 1. Open a web browser to https://192.168.1.1
    - Use the IP address of your Pi
 1. Follow the onscreen instructions to create your first user
-1. After logging in, click the setting to add users, delete users, change your password, setup your Amazon Alexa or Google Assistant, adjust the logs, and to **download and the SSL/TLS certificate** *(This will stop those warnings when visiting the page)*
+1. After logging in, click the setting to add users, delete users, change your password, setup your Amazon Alexa or Google Assistant, adjust the logs, and to **download and install the SSL/TLS certificate** *(This will stop those warnings when visiting the page)*
 
 ### Port Forwarding and Making Garage-Pi-v2 Public to the Internet
 **This is extremely dangerous. Only do this if you understand the risks involved.**
@@ -73,6 +73,7 @@ Otherwise, you should setup a VPN in your home and tunnel into it before accessi
 - [x] Users have a log of when the garage opens from pressing the garage button.
 - [ ] Add PWA components for iOS compatibility
 - [ ] Allow for multiple garage door openers
+- [ ] Add instructions on how to change SSL/TLS Cert to match the user's IP address
 
 
 ## Acknowledgements

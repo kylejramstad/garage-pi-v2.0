@@ -78,8 +78,10 @@ body {
     margin: 10px 0px;
     padding:12px;
   }
-#log {
-	margin: 0 auto;
+#log table{
+  text-align: center;
+  margin: 0 auto;
+  width: 80%; 
 }
 .right {
     text-align: right;
