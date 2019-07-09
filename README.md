@@ -74,6 +74,7 @@ Otherwise, you should setup a VPN in your home and tunnel into it before accessi
 - [ ] Add PWA components for iOS compatibility
 - [ ] Allow for multiple garage door openers
 - [ ] Add instructions on how to change SSL/TLS Cert to match the user's IP address
+- [ ] Add "open" or "close" to logs
 
 
 ## Acknowledgements

@@ -242,7 +242,7 @@ app.get('/logout', auth, function (req, res) { // Logout by destroying the sessi
 });
 
 app.get('/assistant', function(req, res) { //Google Assistant API Call. Used with IFTTT
-    clearInterval(check);//Stop checking because this was not a button push
+    clearInterval(check); //Stop checking for button because this was not a button push
     
 	var username = req.query.username;
 	if(login.getUser(username)){
@@ -257,7 +257,7 @@ app.get('/assistant', function(req, res) { //Google Assistant API Call. Used wit
 	        setTimeout(function() {
 	            rpio.write(relayPin, rpio.HIGH);
 	            res.send('done');
-    			setCheck(); //Start checking again
+    			buttonCheck(); //Start checking again
 	        }, 1000);
 	
 	    }
@@ -278,25 +278,22 @@ function getState() {
 }
 
 var check;
-setCheck();
+buttonCheck();
 
-function setCheck(){
-		setTimeout(function() { //setTimeout so that the garage has time to open or close
-    		var startState = getState();
-			var newState;
-			check = setInterval(function () { 
-            	newState = getState(); //check garage's current state
-                if(startState.open != newState.open || startState.close != newState.close){ //state of the garage has changed
-   					log.addLog('Button Push');
-   					clearInterval(check); //stop checking
-   					setCheck(); //reset check (this will then take 10 seconds to start up again)
-                }
-        	}, 1000); //Check every 1 second	
-    	},10000); //This is set to 10 seconds to allow the garage to open or close before checking
+function buttonCheck(){
+	var startState = getState();
+	var newState = getState();
+	check = setInterval(function (){
+		newState = getState();
+		if((startState.open && !newState.open) || (startState.close && !newState.close)){
+			log.addLog('Button Push');
+		}
+		startState = getState();
+	},100);
 }
 
 app.get('/relay', auth, function(req, res) {   //Open or Close garage with the relay
-    clearInterval(check); //Stop checking because this was not a button push
+    clearInterval(check); //Stop checking for button because this was not a button push
         
    	var username = req.session.user;
    	
@@ -307,7 +304,7 @@ app.get('/relay', auth, function(req, res) {   //Open or Close garage with the r
   	setTimeout(function() {
     	rpio.write(relayPin, rpio.HIGH);
     	res.send('done');
-    	setCheck(); //Start checking again
+    	buttonCheck(); //Start checking again
   	}, 1000);
 });
 
@@ -325,4 +322,4 @@ https.createServer({
   cert: fs.readFileSync('ssl/server.cer')
 }, app).listen(443, () => {
   console.log('Listening...')
-})
+});
