@@ -249,7 +249,7 @@ app.get('/assistant', function(req, res) { //Google Assistant API Call. Used wit
 	    var password = req.query.password;
 	    var salt = login.getUser(username).salt;
 	    var hash = crypto.pbkdf2Sync(password, salt+username, 1000, 64, `sha512`).toString(`hex`);
-	    if(login.getUser(username).hash == hash && ((req.query.open && !rpio.read(closePin))||(req.query.close && !rpio.read(openPin)))){
+	    if(login.getUser(username).hash == hash && ((req.query.open && getState().close)||(req.query.close && getState().open))){
 			
 			log.addLog(username);
 	
