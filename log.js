@@ -7,7 +7,19 @@ var addLog = function(user) {
 	var id = crypto.randomBytes(20).toString('hex'); //Makes a random event id so that we have unique entries in our log
   	var today = new Date();
  	var date = (today.getMonth()+1)+'-'+today.getDate()+'-'+today.getFullYear();
-  	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+ 	
+ 	var hours = today.getHours();
+ 	var minutes = today.getMinutes();
+ 	var seconds = today.getSeconds();
+ 	
+ 	if(hours < 10)
+ 		hours = "0"+hours;
+ 	if(minutes < 10)
+ 		minutes = "0"+minutes;
+ 	if(seconds < 10)
+ 		seconds = "0"+seconds;
+ 	
+  	var time = hours + ":" + minutes + ":" + seconds;
 	
 	db.set(id,[username,date,time]);
   	db.sync();
