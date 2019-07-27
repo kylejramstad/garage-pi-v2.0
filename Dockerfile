@@ -27,8 +27,9 @@ RUN sudo tzupdate
 # Copy over the package.json
 COPY package.json /code
 
-# Installs all modules in package.json
+# Installs all modules in package.json and checks for security issues and fix them
 RUN sudo npm install
+RUN sudo npm audit fix
 
 # Copy over everything into the container
 COPY . /code
