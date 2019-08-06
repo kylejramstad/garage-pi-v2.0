@@ -3,3 +3,6 @@ node_modules
 
 # The only thing I don't like about OSx
 .DS_Store
+
+#Don't keep these
+notes

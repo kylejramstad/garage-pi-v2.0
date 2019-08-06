@@ -67,7 +67,7 @@ app.get('/', auth, function(req, res) {
 	if(req.query.deleted == 'true'){
 		deleted = true;
 	}
-	res.render('index.ejs', {log: log.getLogs(),create:create,deleted:deleted});
+	res.render('index.ejs', {log: log.getLogs().reverse(),create:create,deleted:deleted});
 });
 
 app.get('/settings', auth, function(req, res) {
@@ -108,7 +108,7 @@ app.post('/login', function(req, res) { //Check if username exists then if passw
 		//Username exists
 		var password = req.body.password;
 		var salt = login.getUser(username).salt;
-		var hash = crypto.pbkdf2Sync(password, salt+username, 1000, 64, `sha512`).toString(`hex`);
+		var hash = crypto.pbkdf2Sync(password, salt+username, 100000, 64, `sha512`).toString(`hex`);
 		if(login.getUser(username).hash == hash){
 			//Correct Password
 			req.session.user = username; 
@@ -222,7 +222,7 @@ app.post('/settings/users', function(req, res){ //Create the user from the form 
 			var passwordNew2 = req.body.passwordNew2;
 			
 			var salt = login.getUser(username).salt;
-			var hashCheck = crypto.pbkdf2Sync(passwordOriginal, salt+username, 1000, 64, `sha512`).toString(`hex`);
+			var hashCheck = crypto.pbkdf2Sync(passwordOriginal, salt+username, 100000, 64, `sha512`).toString(`hex`);
 
 			if(login.getUser(username).hash == hashCheck && passwordNew1 == passwordNew2){ //Create new user as long as the user doesn't exist					
 				var result = owasp.test(passwordNew1);
@@ -259,7 +259,7 @@ app.get('/assistant', function(req, res) { //Google Assistant API Call. Used wit
 	if(login.getUser(username)){
 		var password = req.query.password;
 		var salt = login.getUser(username).salt;
-		var hash = crypto.pbkdf2Sync(password, salt+username, 1000, 64, `sha512`).toString(`hex`);
+		var hash = crypto.pbkdf2Sync(password, salt+username, 100000, 64, `sha512`).toString(`hex`);
 		if(login.getUser(username).hash == hash && ((req.query.open && getState().close)||(req.query.close && getState().open))){
 			
 			if(req.query.close){

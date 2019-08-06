@@ -13,7 +13,7 @@ var addUser = function(user,pass) {
 		const username = user;
 		const password = pass;
 		const salt_gen = genRandomString(64);
-		const hash_gen = crypto.pbkdf2Sync(password, salt_gen+username, 1000, 64, `sha512`).toString(`hex`);
+		const hash_gen = crypto.pbkdf2Sync(password, salt_gen+username, 100000, 64, `sha512`).toString(`hex`);
 	
 		db.set(username,{salt:salt_gen,hash:hash_gen});
 		if(db.get('first')){
