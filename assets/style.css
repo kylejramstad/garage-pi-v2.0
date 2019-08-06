@@ -9,10 +9,16 @@
   position: relative;
   z-index: 1;
   background: #FFFFFF;
-  max-width: 360px;
+  max-width: 500px;
   margin: 0 auto 30px;
   padding: 20px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  overflow: auto;
+}
+@media only screen and (max-width: 600px){
+.content {
+  max-width: 100%;
+}
 }
 .content input {
   font-family: "Roboto", sans-serif;
@@ -81,7 +87,11 @@ body {
 #log table{
   text-align: center;
   margin: 0 auto;
-  width: 80%; 
+}
+@media only screen and (max-width: 600px){
+#log table{
+  font-size: 0.75em;
+}
 }
 .right {
     text-align: right;
