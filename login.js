@@ -3,9 +3,9 @@ const JSONdb = require('simple-json-db');
 const db = new JSONdb('./databases/users.json');
 
 var genRandomString = function(length){
-    return crypto.randomBytes(Math.ceil(length/2))
-            .toString('hex') /** convert to hexadecimal format */
-            .slice(0,length);   /** return required number of characters */
+	return crypto.randomBytes(Math.ceil(length/2))
+			.toString('hex') /** convert to hexadecimal format */
+			.slice(0,length);	/** return required number of characters */
 };
 
 var addUser = function(user,pass) {
@@ -19,15 +19,15 @@ var addUser = function(user,pass) {
 		if(db.get('first')){
 			db.set('first',false);
 		}
-  		db.sync();
+		db.sync();
 	}
 }
 
 var getUser = function(user){
   if(user != "first"){
-  	return db.get(user);
+	return db.get(user);
   }
-  	return false;
+	return false;
 }
 
 var isFirst = function(){
