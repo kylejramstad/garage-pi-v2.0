@@ -79,8 +79,8 @@ app.get('/settings/cert', auth, function(req, res) {
 });
 
 app.get('/settings/cert/download', auth, function(req, res){
-	const file = __dirname + '/ssl/server.cer';
-	res.download(file,'certificate.cer');
+	const file = __dirname + '/ssl/IntermediateAndRoot.Cert.crt';
+	res.download(file,'certificate.crt');
 });
 
 app.get('/login',function(req, res){ //does not use the auth() middleware because users seeing this page are most likely not signed in anyway
@@ -345,8 +345,8 @@ app.use(function(req, res, next){
 
 //Start App with HTTPS
 https.createServer({
-  key: fs.readFileSync('ssl/server.key'),
-  cert: fs.readFileSync('ssl/server.cer')
+  key: fs.readFileSync('ssl/Leaf.PrivateKey.pem'),
+  cert: fs.readFileSync('ssl/LeafAndIntermediate.Cert.pem')
 }, app).listen(443, () => {
   console.log('Listening...')
 });

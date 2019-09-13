@@ -34,7 +34,7 @@ You can find instuctions on [How to set up your Raspberry Pi without a keyboard,
 1. Build the Docker Image
    - ```sudo docker build .```
    - **Do not miss the . (dot) at the end of that command**
-   - This may take some time (about 30 minutes)
+   - This may take some time (about 60 minutes)
    - It should end in saying something similar to **"Successfully built 92e73e14e9a0"**
    - The random numbers and characters at the end is the name of the image
 1. Run the image
@@ -77,6 +77,7 @@ Otherwise, you should setup a VPN in your home and tunnel into it before accessi
 - [ ] Add PWA components for iOS compatibility
 - [ ] Allow for multiple garage door openers
 - [ ] Add instructions on how to change SSL/TLS Cert to match the user's IP address
+- [ ] Reduce build time
 
 
 ## Acknowledgements
