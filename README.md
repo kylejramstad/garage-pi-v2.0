@@ -16,20 +16,23 @@ You can find instuctions on [How to set up your Raspberry Pi without a keyboard,
 1. You'll first need to ssh into your Pi
    - ```ssh pi@192.168.1.1```
    - Use the IP address of your Pi
+   - default password is "raspberry"
 1. Then install docker
    - ```curl -sSL https://get.docker.com | sh```
    - This will run the install script right from docker.com
 
 ### Install Garage-Pi-v2 From Repository (faster)
-1. Run the following command in your terminal (still in ssh on your Pi)
+1. Open up a terminal
+1. ssh into your Pi
+   - ```ssh pi@192.168.1.1```
+   - Use the IP address of your Pi
+   - default password is "raspberry"
+1. Download and run
    - ```sudo docker run --restart=always --device=/dev/mem:/dev/mem --name=garage-pi --privileged --publish 443:443 -d bugman000/garage-pi-v2```
 1. **This pre-built image has SSL/TLS certificates and keys that are common for everyone that has downloaded this image! DO NOT SKIP THIS STEP! Otherwise other people will have your servers keys!**
-   - ```sudo docker exec -it garage-pi /bin/bash```
-   - ```cd ssl```
-   - ```sudo ./create.sh```
+   - ```sudo docker exec garage-pi /bin/bash /code/create.sh```
       - add parameters to this command to add more DNS alt_names
-      - For example: ```sudo ./create.sh example.com sub.example.com```
-   - ```exit```
+      - For example: ```sudo docker exec garage-pi /bin/bash /code/create.sh **example.com sub.example.com**```
 1. Restart your server
    - ```sudo docker container restart garage-pi```
 1. Add update script
@@ -41,6 +44,7 @@ You can find instuctions on [How to set up your Raspberry Pi without a keyboard,
 1. ssh into your Pi
    - ```ssh pi@192.168.1.1```
    - Use the IP address of your Pi
+   - default password is "raspberry"
 1. Copy the source files to the Pi from Github
    - ```sudo git clone https://github.com/kylejramstad/garage-pi-v2.git```
 1. Build the Docker Image
@@ -89,9 +93,10 @@ Otherwise, you should setup a VPN in your home and tunnel into it before accessi
 - [ ] Timer to close garage if left open too long (allow user to set time)
 - [ ] Only allow admin user to delete other users (first user is considered admin)
 - [x] Show users how many logs they currently keep
-- [ ] Add notifications via ifttt webhooks (auto close)
+- [ ] Add notifications via ifttt webhooks (auto close, open or close manually, open closed by user, left partially open)
 - [ ] Allow user to disable voice assistant
 - [ ] Create new certificates and keys automatically if installed from repository
+- [ ] Make download script so that user only types one line to install software
 
 ## Acknowledgements
 * Original Garage-Pi Created by Tyler Jones at Howchoo.com and on Github

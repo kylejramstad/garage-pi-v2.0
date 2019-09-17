@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ./ssl
+cd ./garage-pi-v2/ssl
 sudo ./create.sh $1 $2 $3 $4 $5 $6 $7 $8
 cd ..
 sudo docker build -t bugman000/garage-pi-v2 .

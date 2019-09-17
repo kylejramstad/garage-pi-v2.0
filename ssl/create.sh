@@ -1,9 +1,6 @@
 #!/bin/bash
 #Add DNS records to alt_names on CertRequestTemplate.cnf
 
-echo "DNS.2 = $(hostname)" >> CertRequestTemplate.cnf
-echo "DNS.3 = $(hostname).local" >> CertRequestTemplate.cnf
-
 number=$(hostname -I | grep -o ' ' | wc -l)
 if [ $number -ne 0 ]
 then
@@ -19,6 +16,16 @@ do
 		number=$((number+1))
         echo "DNS.$number = $arg" >> CertRequestTemplate.cnf
 done
+
+#Delete Old Certs and Keys
+find . -name "*.pem" -type f -delete
+find . -name "*.crt" -type f -delete
+mv IntermediateCertDatabase.db.attr.old IntermediateCertDatabase.db.attr    
+mv IntermediateCertDatabase.db.old IntermediateCertDatabase.db    
+mv IntermediateSerial.seq.old  IntermediateSerial.seq      
+mv RootCertDatabase.db.attr.old RootCertDatabase.db.attr    
+mv RootCertDatabase.db.old RootCertDatabase.db    
+mv RootSerial.seq.old RootSerial.seq  
 
 #ROOT CERT
 openssl genrsa -out Root.PrivateKey.pem 4096

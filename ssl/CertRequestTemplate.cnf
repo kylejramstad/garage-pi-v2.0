@@ -135,3 +135,5 @@ authorityKeyIdentifier = keyid,issuer
 [alt_names]
 
 DNS.1 = localhost
+DNS.2 = raspberrypi
+DNS.3 = raspberrypi.local
