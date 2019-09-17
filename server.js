@@ -14,7 +14,6 @@ const FileStore = require('session-file-store')(session);
 const bodyParser = require('body-parser');
 const owasp = require('owasp-password-strength-test');
 
-
 const app = express();
 app.disable('x-powered-by'); //not technically needed because of the use of helmet, but it is recommended
 
@@ -57,7 +56,7 @@ rpio.open(closePin, rpio.INPUT, rpio.PULL_UP);
 rpio.open(relayPin, rpio.OUTPUT, rpio.HIGH);
 
 
-//Endpoints
+//Endpoints//
 app.get('/', auth, function(req, res) {
 	var create = false;
 	var deleted = false;
@@ -281,7 +280,7 @@ app.get('/assistant', function(req, res) { //Google Assistant API Call. Used wit
 });
 
 
-//API calls
+//API calls//
 app.get('/status', auth, function(req, res) { //For the react components to read the GPIO PINS
   res.send(JSON.stringify(getState()));
 });

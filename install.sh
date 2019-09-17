@@ -17,6 +17,9 @@ sudo apt-get -y install python2.7 python-pip
 sudo pip install -U tzupdate
 sudo tzupdate
 
+# git is used for updating
+sudo apt-get -y install git
+
 # Installs all modules in package.json and checks for security issues and fix them
 sudo npm install
 sudo npm audit fix
