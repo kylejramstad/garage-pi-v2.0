@@ -127,7 +127,7 @@ app.post('/login', function(req, res) { //Check if username exists then if passw
 });
 
 app.get('/settings/logs', auth, function(req, res){
-	res.render('logs.ejs');
+	res.render('logs.ejs', {size: log.getSize()});
 });
 
 app.post('/settings/logs', auth, function(req, res){
@@ -135,15 +135,15 @@ app.post('/settings/logs', auth, function(req, res){
 		var number = parseInt(req.body.number, 10);
 		if(!(number < 0 || number > 1000)){
 			log.setSize(number);
-			res.render('logs.ejs', {success: true});
+			res.render('logs.ejs', {success: true,size: log.getSize()});
 		}
 		else{
-			res.render('logs.ejs', {error: true});
+			res.render('logs.ejs', {error: true,size: log.getSize()});
 		}
 	}
 	else{
 		log.resetLogs();
-		res.render('logs.ejs', {reset: true});
+		res.render('logs.ejs', {reset: true,size: log.getSize()});
 	}
 });
 

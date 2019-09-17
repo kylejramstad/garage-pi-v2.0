@@ -70,4 +70,4 @@ var resetLogs = function(){
 	setSize(size); //resets size back to what it was
 }
 
-module.exports = {addLog,getLogs,setSize,resetLogs}
+module.exports = {addLog,getLogs,setSize,resetLogs,getSize}
