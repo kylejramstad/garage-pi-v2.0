@@ -153,10 +153,20 @@ app.get('/settings/assistant', auth, function(req, res){
 
 app.post('/settings/assistant', auth, function(req, res){
 	var username = "assistant";
-	var password = login.genRandomString(15);
-	login.addUser(username,password);
-	res.render('assistant.ejs', {username: username, password: password});
+	if(req.query.deleted === 'true'){
+		login.deleteUser(username);
+		res.render('assistant.ejs', {deleted: true});
+	}
+	else if(req.query.create === 'true'){ //only other option is to create
+		var password = login.genRandomString(15);
+		login.addUser(username,password);
+		res.render('assistant.ejs', {username: username, password: password});
+	}
+	else{
+		res.render('assistant.ejs');
+	}
 });
+
 
 app.get('/settings/users', function(req, res){ //does not use the auth() middleware so we can check for first login as well
 	if ((req.session && req.session.admin) || login.isFirst()){ // If logged in or first time user
@@ -207,7 +217,7 @@ app.post('/settings/users', function(req, res){ //Create the user from the form 
 			var username1 = req.body.username1;
 			var username2 = req.body.username2;
 			if(login.getUser(username) && username1 == username2 && username1 != req.session.user && username2 != req.session.user && username1 != "first"){
-				login.deleteUser(username1);
+
 				res.redirect('/?deleted=true');
 			}
 			else{
