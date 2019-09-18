@@ -11,7 +11,7 @@ WORKDIR /code
 COPY . /code
 
 # Install
-RUN ./install.sh
+RUN ./scripts/install.sh
 
 # Expose the port
 # The app listens at port 443

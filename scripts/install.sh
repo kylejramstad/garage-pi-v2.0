@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#start at root of code
+cd /code
 # refreshing the repositories
 apt-get update
 
