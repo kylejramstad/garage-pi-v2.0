@@ -8,10 +8,10 @@ Control your garage door using a web application running on your Raspberry Pi 3.
 You can find the [original setup instructions on howchoo](https://howchoo.com/g/yznmzmuxywu/how-to-control-your-garage-door-from-your-phone-using-a-raspberry-pi). These instructions will show you how to wire your Pi and how to install the original Garage-Pi.
 **Use only for wiring instructions**
 
-   - The open sensor, close sensor, and relay can be wired to the following pins:
+   - The open sensor, close sensor, and relay can be wired to the following physical pins:
        - 7, 11, 12, 13, 15, 16, 18, 21, 22, 24, 26, 29, 31, 32, 33, 35, 36, 37, 38, 40
        - These are physical pins of the Raspberry Pi
-![alt text](https://www.theengineeringprojects.com/wp-content/uploads/2018/07/introduction-to-raspberry-pi-3-b-plus-2.png "Physical Pinout Diagram")
+![alt text](https://www.bigmessowires.com/wp-content/uploads/2018/05/Raspberry-GPIO.jpg "Physical Pinout Diagram")
 
 ### Setup Rasbian
 You can find instuctions on [How to set up your Raspberry Pi without a keyboard, monitor, or mouse on howchoo](https://howchoo.com/g/mzgzy2mwowj/how-to-set-up-raspberry-pi-without-keyboard-monitor-mouse).
