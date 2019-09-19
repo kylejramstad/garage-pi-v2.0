@@ -1,12 +1,17 @@
 # garage-pi-v2
 
-Control your garage door using a web application running on your Raspberry Pi.
+Control your garage door using a web application running on your Raspberry Pi 3.
 
 ## Setup for V2
 
 ### Wiring
 You can find the [original setup instructions on howchoo](https://howchoo.com/g/yznmzmuxywu/how-to-control-your-garage-door-from-your-phone-using-a-raspberry-pi). These instructions will show you how to wire your Pi and how to install the original Garage-Pi.
 **Use only for wiring instructions**
+
+   - The open sensor, close sensor, and relay can be wired to the following pins:
+       - 7, 11, 12, 13, 15, 16, 18, 21, 22, 24, 26, 29, 31, 32, 33, 35, 36, 37, 38, 40
+       - These are physical pins of the Raspberry Pi
+![alt text](https://www.theengineeringprojects.com/wp-content/uploads/2018/07/introduction-to-raspberry-pi-3-b-plus-2.png "Physical Pinout Diagram")
 
 ### Setup Rasbian
 You can find instuctions on [How to set up your Raspberry Pi without a keyboard, monitor, or mouse on howchoo](https://howchoo.com/g/mzgzy2mwowj/how-to-set-up-raspberry-pi-without-keyboard-monitor-mouse).
@@ -66,7 +71,7 @@ Otherwise, you should setup a VPN in your home and tunnel into it before accessi
 - [x] Allow user to disable voice assistant
 - [x] Create new certificates and keys automatically if installed from repository
 - [x] Make download script so that user only types one line to install software
-- [ ] Make it easy for users to set pins in the settings
+- [x] Make it easy for users to set pins in the settings
 - [ ] Make instructions on how to set up a ddns service so that users can easily access garage-pi
 
 ## Acknowledgements

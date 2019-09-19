@@ -7,6 +7,7 @@ const fs = require('fs')
 const favicon = require('express-favicon');
 const login = require('./login.js');
 const log = require('./log.js');
+const pins = require('./pins.js');
 const crypto = require('crypto');
 const helmet = require('helmet')
 const session = require('express-session');
@@ -47,14 +48,35 @@ var auth = function(req, res, next) {
 
 // RPIO PIN Config
 // default: 13-close, 19-open, 11-relay
-const openPin = process.env.OPEN_PIN || 19;
-const closePin = process.env.CLOSE_PIN || 13;
-const relayPin = process.env.RELAY_PIN || 11;
+// get pins from database when starting up
+var validPins = [7,11,12,13,15,16,18,21,22,24,26,29,31,32,33,35,36,37,38,40];
+var openPinNum;
+var closePinNum;
+var relayPinNum;
+var openPin;
+var closePin;
+var relayPin;
 
-rpio.open(openPin, rpio.INPUT, rpio.PULL_UP);
-rpio.open(closePin, rpio.INPUT, rpio.PULL_UP);
-rpio.open(relayPin, rpio.OUTPUT, rpio.HIGH);
+startPins();
 
+function startPins(){
+	openPinNum = pins.getOpenPin();
+	closePinNum = pins.getClosePin();
+	relayPinNum = pins.getRelayPin();
+	openPin = process.env.OPEN_PIN || openPinNum;
+	closePin = process.env.CLOSE_PIN || closePinNum;
+	relayPin = process.env.RELAY_PIN || relayPinNum;
+
+	rpio.open(openPin, rpio.INPUT, rpio.PULL_UP);
+	rpio.open(closePin, rpio.INPUT, rpio.PULL_UP);
+	rpio.open(relayPin, rpio.OUTPUT, rpio.HIGH);
+}
+
+function setPins(open,close,relay){
+	pins.setOpenPin(open);
+	pins.setClosePin(close);
+	pins.setRelayPin(relay);
+}
 
 //Endpoints//
 app.get('/', auth, function(req, res) {
@@ -80,6 +102,26 @@ app.get('/settings/cert', auth, function(req, res) {
 app.get('/settings/cert/download', auth, function(req, res){
 	const file = __dirname + '/ssl/IntermediateAndRoot.Cert.crt';
 	res.download(file,'certificate.crt');
+});
+
+app.get('/settings/pins', auth, function(req, res) {
+	res.render('pins.ejs', {open:openPinNum,close:closePinNum,relay:relayPinNum});
+});
+
+app.post('/settings/pins', auth, function(req, res){
+	var open = parseInt(req.body.open,10)
+	var close = parseInt(req.body.close,10)
+	var relay = parseInt(req.body.relay,10)
+	
+	if(validPins.includes(open) && validPins.includes(close) && validPins.includes(relay)){
+		setPins(open,close,relay);
+		startPins();
+		res.render('pins.ejs', {success:true,open:openPinNum,close:closePinNum,relay:relayPinNum});
+	}
+	else{
+		res.render('pins.ejs', {success:false,open:openPinNum,close:closePinNum,relay:relayPinNum});
+	}
+	
 });
 
 app.get('/login',function(req, res){ //does not use the auth() middleware because users seeing this page are most likely not signed in anyway
