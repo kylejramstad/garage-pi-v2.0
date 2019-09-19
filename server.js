@@ -8,6 +8,7 @@ const favicon = require('express-favicon');
 const login = require('./login.js');
 const log = require('./log.js');
 const pins = require('./pins.js');
+const timer = require('./timer.js');
 const crypto = require('crypto');
 const helmet = require('helmet')
 const session = require('express-session');
@@ -304,8 +305,6 @@ app.get('/logout', auth, function (req, res) { // Logout by destroying the sessi
 });
 
 app.get('/assistant', function(req, res) { //Google Assistant API Call. Used with IFTTT
-	clearInterval(check); //Stop checking for button because this was not a button push
-	
 	var username = req.query.username;
 	if(login.getUser(username)){
 		var password = req.query.password;
@@ -320,13 +319,7 @@ app.get('/assistant', function(req, res) { //Google Assistant API Call. Used wit
 				log.addLog("Open",username);	
 			}
 	
-			rpio.write(relayPin, rpio.LOW);
-			setTimeout(function() {
-				rpio.write(relayPin, rpio.HIGH);
-				res.send('done');
-				buttonCheck(); //Start checking again
-			}, 1000);
-	
+			buttonPress();
 		}
 	}
 });
@@ -336,6 +329,15 @@ app.get('/assistant', function(req, res) { //Google Assistant API Call. Used wit
 app.get('/status', auth, function(req, res) { //For the react components to read the GPIO PINS
   res.send(JSON.stringify(getState()));
 });
+
+function buttonPress(){
+	clearInterval(check); //Stop checking for button because this was not a button push
+	rpio.write(relayPin, rpio.LOW);
+	setTimeout(function() {
+		rpio.write(relayPin, rpio.HIGH);
+		buttonCheck(); //Start checking again
+	}, 1000);
+}
 
 function getState() {
   return {
@@ -362,9 +364,66 @@ function buttonCheck(){
 	},100);
 }
 
-app.get('/relay', auth, function(req, res) {   //Open or Close garage with the relay
-	clearInterval(check); //Stop checking for button because this was not a button push
+var interval = 100; //How often to check in milliseconds
+var openCheckInterval;
+openCheck();
+
+function openCheck(){
+	var currentTimer = timer.getTime();
+	var currentOnOff = timer.getOnOff();
+	var currentState = getState();
+
+	openCheckInterval = setInterval(function (){
+		if(currentState.open && currentTimer <= 0 && currentOnOff){
+			clearInterval(openCheckInterval);
+			log.addLog("Close","Auto Close");
+			buttonPress();
+			openCheck();
+		} 
+		else if(currentState.open && currentTimer > 0 && currentOnOff){
+			currentTimer -= interval;
+		}
+		currentState = getState();	
+	},interval);
+}
+
+app.get('/settings/timer', auth, function(req, res){
+	var number = timer.getTime()/60000
+	var onOff = timer.getOnOff();
+	res.render('timer.ejs', {time:number,onOffSwitch:onOff});
+});
+
+app.post('/settings/timer', auth, function(req, res){
+	var newTimer = parseInt(req.body.time,10);
+	var newOnOff;
+	if(req.body.onoffswitch == "on"){
+		newOnOff = "on";
+		if(newTimer >=1 && newTimer <= 1440){
+			timer.setTime((newTimer*60000));
+			timer.setOnOff(newOnOff);
+	
+			clearInterval(openCheckInterval);
+			openCheck();
+	
+			res.render('timer.ejs', {success:true,time:newTimer,onOffSwitch:newOnOff});
+		}
+		else{
+			res.render('timer.ejs', {success:false,time:"Minutes",onOffSwitch:newOnOff});
+		}
+	}
+	else{ //switch is off so the number of minutes doesn't need checking
+		newOnOff = "off";
+		timer.setOnOff(newOnOff);
 		
+		clearInterval(openCheckInterval);
+		openCheck();
+		
+		res.render('timer.ejs', {success:true,time:" ",onOffSwitch:newOnOff});
+	}
+});
+
+
+app.get('/relay', auth, function(req, res) {   //Open or Close garage with the relay
 	var username = req.session.user;
 	
 	if(getState().open){
@@ -377,13 +436,7 @@ app.get('/relay', auth, function(req, res) {   //Open or Close garage with the r
 		log.addLog("",username); //just in case the garage was half open/close, we still want to log this
 	}
 
-	// Simulate a button press
-	rpio.write(relayPin, rpio.LOW);
-	setTimeout(function() {
-		rpio.write(relayPin, rpio.HIGH);
-		res.send('done');
-		buttonCheck(); //Start checking again
-	}, 1000);
+	buttonPress();
 });
 
 //give pages access to the assets folder for JS and CSS files

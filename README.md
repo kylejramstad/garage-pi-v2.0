@@ -9,7 +9,7 @@ You can find the [original setup instructions on howchoo](https://howchoo.com/g/
 **Use only for wiring instructions**
 
    - The open sensor, close sensor, and relay can be wired to the following physical pins:
-       - 7, 11, 12, 13, 15, 16, 18, 21, 22, 24, 26, 29, 31, 32, 33, 35, 36, 37, 38, 40
+       - 3, 5, 7, 8, 10, 11, 12, 13, 15, 16, 18, 19, 21, 22, 23, 24, 26, 29, 31, 32, 33, 35, 36, 37, 38, 40.
        - These are physical pins of the Raspberry Pi
 ![alt text](https://www.bigmessowires.com/wp-content/uploads/2018/05/Raspberry-GPIO.jpg "Physical Pinout Diagram")
 
@@ -64,7 +64,7 @@ Otherwise, you should setup a VPN in your home and tunnel into it before accessi
 - [ ] Add PWA components for iOS compatibility
 - [ ] Allow for multiple garage door openers
 - [ ] Reduce build time below 1 hour
-- [ ] Timer to close garage if left open too long (allow user to set time)
+- [x] Timer to close garage if left open too long (allow user to set time)
 - [ ] Only allow admin user to delete other users (first user is considered admin)
 - [x] Show users how many logs they currently keep
 - [ ] Add notifications via ifttt webhooks (auto close, open or close manually, open closed by user, left partially open)

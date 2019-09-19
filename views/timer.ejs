@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Garage Pi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+.onoffswitch {
+    position: relative; width: 80px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid ; border-radius: 10px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 31px; padding: 0; line-height: 31px;
+    font-size: 15px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "ON";
+    padding-left: 5px;
+    background-color: #34A7C1; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "OFF";
+    padding-right: 5px;
+    background-color: #EEEEEE; color: #999999;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 25px; margin: 3px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 45px;
+    border: 2px solid ; border-radius: 10px;
+    transition: all 0.3s ease-in 0s; 
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="content">
+
+	<div style="display:block; overflow: auto;">
+        <form class="left" action="/settings">
+                <input type="submit" value="Back" />
+        </form>
+	</div>
+
+	<h4>Auto Close Timer</h4>
+	
+	<%if(typeof success != "undefined" && success == true){%>
+       <div class="isa_success">Timer has been successfully set</div>
+    <%}%>
+    
+    <%if(typeof success != "undefined" && success == false){%>
+		<div class="isa_error">Must use a number between 1-1440 minutes</div>
+    <%}%>
+    
+	After how many minutes do you want the garage door to close in case it is left open?
+	<p></p>
+	<form class="login-form" method="post">
+		<div class="onoffswitch">
+		
+			<%if(onOffSwitch == "on"){%>
+				<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+			<%}else{%>
+				<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+			<%}%>			
+			<label class="onoffswitch-label" for="myonoffswitch">
+				<span class="onoffswitch-inner"></span>
+				<span class="onoffswitch-switch"></span>
+			</label>
+		</div><br>
+		<input type="number" name="time" min="1" max="1440" placeholder=<%=time%>>
+		<button>Update Settings</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
