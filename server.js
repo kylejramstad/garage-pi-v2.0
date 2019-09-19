@@ -49,7 +49,7 @@ var auth = function(req, res, next) {
 // RPIO PIN Config
 // default: 13-close, 19-open, 11-relay
 // get pins from database when starting up
-var validPins = [7,11,12,13,15,16,18,21,22,24,26,29,31,32,33,35,36,37,38,40];
+var validPins = [3,5,7,8,10,11,12,13,15,16,18,19,21,22,23,24,26,29,31,32,33,35,36,37,38,40];
 var openPinNum;
 var closePinNum;
 var relayPinNum;
