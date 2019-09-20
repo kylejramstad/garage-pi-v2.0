@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Garage Pi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+.onoffswitch {
+    position: relative; width: 80px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid ; border-radius: 10px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 31px; padding: 0; line-height: 31px;
+    font-size: 15px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "ON";
+    padding-left: 5px;
+    background-color: #34A7C1; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "OFF";
+    padding-right: 5px;
+    background-color: #EEEEEE; color: #999999;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 25px; margin: 3px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 45px;
+    border: 2px solid ; border-radius: 10px;
+    transition: all 0.3s ease-in 0s; 
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="content">
+
+	<div style="display:block; overflow: auto;">
+        <form class="left" action="/settings">
+                <input type="submit" value="Back" />
+        </form>
+	</div>
+
+	<h3>Configure Push Notifications</h3>
+	<em>You need to configure 2 applets on <a href="IFTTT.com">IFTTT.com</a> for notifications to work. Please see the instructions below.</em>
+		
+	<%if(typeof success != "undefined" && success == true){%>
+       <div class="isa_success">Notifications have been successfully updated</div>
+    <%}%>
+    
+	<p></p>
+	<form class="login-form" method="post">
+		Auto Close:<div class="onoffswitch">
+			<%if(autoCloseSwitch == "on"){%>
+				<input type="checkbox" name="autoClose" class="onoffswitch-checkbox" id="autoCloseSwitch" checked>
+			<%}else{%>
+				<input type="checkbox" name="autoClose" class="onoffswitch-checkbox" id="autoCloseSwitch">
+			<%}%>			
+			<label class="onoffswitch-label" for="autoCloseSwitch">
+				<span class="onoffswitch-inner"></span>
+				<span class="onoffswitch-switch"></span>
+			</label>
+		</div>
+		
+		User Close:<div class="onoffswitch">
+			<%if(userCloseSwitch == "on"){%>
+				<input type="checkbox" name="userClose" class="onoffswitch-checkbox" id="userCloseSwitch" checked>
+			<%}else{%>
+				<input type="checkbox" name="userClose" class="onoffswitch-checkbox" id="userCloseSwitch">
+			<%}%>			
+			<label class="onoffswitch-label" for="userCloseSwitch">
+				<span class="onoffswitch-inner"></span>
+				<span class="onoffswitch-switch"></span>
+			</label>
+		</div>
+		
+		Button Close:<div class="onoffswitch">
+			<%if(buttonCloseSwitch == "on"){%>
+				<input type="checkbox" name="buttonClose" class="onoffswitch-checkbox" id="buttonCloseSwitch" checked>
+			<%}else{%>
+				<input type="checkbox" name="buttonClose" class="onoffswitch-checkbox" id="buttonCloseSwitch">
+			<%}%>			
+			<label class="onoffswitch-label" for="buttonCloseSwitch">
+				<span class="onoffswitch-inner"></span>
+				<span class="onoffswitch-switch"></span>
+			</label>
+		</div>
+		<br>
+		IFTTT Key:<input type="text" name="key" placeholder=<%=key%>>
+		
+		<br>
+		<button>Update Settings</button>
+    </form>
+  </div>
+  
+  <div class="content">
+  	<h3>How to Setup Push Notifications with IFTTT</h3>
+  	<strong>The IFTTT app needs to be installed on the phone you wish to receive notifications from</strong>
+  	<ol>
+		<li>Connect Garage-Pi to IFTTT<ul>
+			<li>Sign up for <a href="https://ifttt.com/maker_webhooks">IFTTT.com</a></li>
+			<li>Connect the Webhooks Service at <a href="https://ifttt.com/maker_webhooks">https://ifttt.com/maker_webhooks</a></li>
+			<li>Click on the "Documentation" button in the top left hand corner of the page<br>This will bring you to a testing page</li>
+			<li>Enter the "Key" in the settings above</li>
+		</ul></li>
+		<li>Create Applet to Display Auto Close Notifications<ul>
+			<li>Go to <a href="https://ifttt.com/create">https://ifttt.com/create</a></li>
+			<li>Click "This", select "Webhooks", and then click "Receive a web request"</li>
+			<li>Event Name: "Auto_Close"</li>
+			<li>Click "That", select "Notifications", and then click "Send a rich notification from the IFTTT app"</li>
+			<li>Title: "Garage Pi"</li>
+			<li>Message: "Garage door automatically closed because it was open for {{Value1}} minutes."</li>
+			<li>{{Value1}} will be filled in by IFTTT with the amount of time that the garage was left open</li>
+		</ul></li>
+		<li>Complete step two again to Display Notifications whenever the garage is opened or closed<ul>
+			<li>Event Name: "Open_Close"</li>
+			<li>Message: "{{Value1}} just {{Value2}} the garage"</li>
+			<li>{{Value1}} will be filled in with the user and {{Value2}} will be filled in with either "opened" or "closed" by IFTTT</li>
+		</ul></li>
+		<li>Enable push notifications in your settings above</li>
+  	</ol>
+  </div>
+  
+</div>
+</body>
+</html>

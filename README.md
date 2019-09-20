@@ -67,7 +67,7 @@ Otherwise, you should setup a VPN in your home and tunnel into it before accessi
 - [x] Timer to close garage if left open too long (allow user to set time)
 - [ ] Only allow admin user to delete other users (first user is considered admin)
 - [x] Show users how many logs they currently keep
-- [ ] Add notifications via ifttt webhooks (auto close, open or close manually, open closed by user, left partially open)
+- [x] Add notifications via ifttt webhooks (auto close, open or close manually, open closed by user, left partially open)
 - [x] Allow user to disable voice assistant
 - [x] Create new certificates and keys automatically if installed from repository
 - [x] Make download script so that user only types one line to install software

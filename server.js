@@ -9,6 +9,7 @@ const login = require('./login.js');
 const log = require('./log.js');
 const pins = require('./pins.js');
 const timer = require('./timer.js');
+const notification = require('./notification.js');
 const crypto = require('crypto');
 const helmet = require('helmet')
 const session = require('express-session');
@@ -324,69 +325,6 @@ app.get('/assistant', function(req, res) { //Google Assistant API Call. Used wit
 	}
 });
 
-
-//API calls//
-app.get('/status', auth, function(req, res) { //For the react components to read the GPIO PINS
-  res.send(JSON.stringify(getState()));
-});
-
-function buttonPress(){
-	clearInterval(check); //Stop checking for button because this was not a button push
-	rpio.write(relayPin, rpio.LOW);
-	setTimeout(function() {
-		rpio.write(relayPin, rpio.HIGH);
-		buttonCheck(); //Start checking again
-	}, 1000);
-}
-
-function getState() {
-  return {
-	open: !rpio.read(openPin),
-	close: !rpio.read(closePin)
-  }
-}
-
-var check;
-buttonCheck();
-
-function buttonCheck(){
-	var startState = getState();
-	var newState = getState();
-	check = setInterval(function (){
-		newState = getState();
-		if(startState.open && !newState.open){
-			log.addLog("Close",'Button Push');
-		}
-		else if(startState.close && !newState.close){
-			log.addLog("Open",'Button Push');
-		}
-		startState = getState();
-	},100);
-}
-
-var interval = 100; //How often to check in milliseconds
-var openCheckInterval;
-openCheck();
-
-function openCheck(){
-	var currentTimer = timer.getTime();
-	var currentOnOff = timer.getOnOff();
-	var currentState = getState();
-
-	openCheckInterval = setInterval(function (){
-		if(currentState.open && currentTimer <= 0 && currentOnOff){
-			clearInterval(openCheckInterval);
-			log.addLog("Close","Auto Close");
-			buttonPress();
-			openCheck();
-		} 
-		else if(currentState.open && currentTimer > 0 && currentOnOff){
-			currentTimer -= interval;
-		}
-		currentState = getState();	
-	},interval);
-}
-
 app.get('/settings/timer', auth, function(req, res){
 	var number = timer.getTime()/60000
 	var onOff = timer.getOnOff();
@@ -422,20 +360,142 @@ app.post('/settings/timer', auth, function(req, res){
 	}
 });
 
+var autoOnOff = notification.getAuto();
+var userOnOff = notification.getOpenClose();
+var buttonOnOff = notification.getButton();
+var iftttKey = notification.getIFTTTKey();
+
+app.get('/settings/notification', auth, function(req, res){
+	autoOnOff = notification.getAuto();
+	userOnOff = notification.getOpenClose();
+	buttonOnOff = notification.getButton();
+	iftttKey = notification.getIFTTTKey()
+	
+	res.render('notification.ejs', {autoCloseSwitch:autoOnOff,userCloseSwitch:userOnOff,buttonCloseSwitch:buttonOnOff,key:iftttKey});
+});
+
+app.post('/settings/notification', auth, function(req, res){
+	if(req.body.autoClose == "on"){
+		autoOnOff = "on";
+	}
+	else{ //switch is off
+		autoOnOff = "off";
+	}
+	if(req.body.userClose == "on"){
+		userOnOff = "on";
+	}
+	else{ //switch is off
+		userOnOff = "off";	
+	}
+	if(req.body.buttonClose == "on"){
+		buttonOnOff = "on";
+	}
+	else{ //switch is off
+		buttonOnOff = "off";
+	}
+	
+	iftttKey = req.body.key;
+	
+	notification.setIFTTTKey(iftttKey);
+	notification.setAuto(autoOnOff);
+	notification.setOpenClose(userOnOff);
+	notification.setButton(buttonOnOff);
+
+	res.render('notification.ejs', {success:true,autoCloseSwitch:autoOnOff,userCloseSwitch:userOnOff,buttonCloseSwitch:buttonOnOff,key:iftttKey});
+});
+
+
+//API calls//
+app.get('/status', auth, function(req, res) { //For the react components to read the GPIO PINS
+  res.send(JSON.stringify(getState()));
+});
+
+function buttonPress(){
+	clearInterval(check); //Stop checking for button because this was not a button push
+	rpio.write(relayPin, rpio.LOW);
+	setTimeout(function() {
+		rpio.write(relayPin, rpio.HIGH);
+		buttonCheck(); //Start checking again
+	}, 1000);
+}
+
+function getState() {
+  return {
+	open: !rpio.read(openPin),
+	close: !rpio.read(closePin)
+  }
+}
+
+var check;
+buttonCheck();
+
+function buttonCheck(){
+	var startState = getState();
+	var newState = getState();
+	check = setInterval(function (){
+		newState = getState();
+		if(startState.open && !newState.open){
+			log.addLog("Close",'Button Push');
+			if(buttonOnOff == 'on'){
+				notification.sendOpenClose("closed","Someone");
+			}			
+		}
+		else if(startState.close && !newState.close){
+			log.addLog("Open",'Button Push');
+			if(buttonOnOff == 'on'){
+				notification.sendOpenClose("opened","Someone");
+			}
+		}
+		startState = getState();
+	},100);
+}
+
+var interval = 100; //How often to check in milliseconds
+var openCheckInterval;
+openCheck();
+
+function openCheck(){
+	var currentTimer = timer.getTime();
+	var currentOnOff = timer.getOnOff();
+	var currentState = getState();
+
+	openCheckInterval = setInterval(function (){
+		if(currentState.open && currentTimer <= 0 && currentOnOff){
+			clearInterval(openCheckInterval);
+			log.addLog("Close","Auto Close");
+			buttonPress();
+			if(autoOnOff  == 'on'){
+				notification.sendAutoClose((timer.getTime()/60000));
+			}
+			openCheck();
+		} 
+		else if(currentState.open && currentTimer > 0 && currentOnOff){
+			currentTimer -= interval;
+		}
+		currentState = getState();	
+	},interval);
+}
 
 app.get('/relay', auth, function(req, res) {   //Open or Close garage with the relay
 	var username = req.session.user;
-	
 	if(getState().open){
 		log.addLog("Close",username);
+		if(userOnOff == 'on'){
+				notification.sendOpenClose("closed",username);
+		}
 	}
 	else if(getState().close){
 		log.addLog("Open",username);
+		if(userOnOff == 'on'){
+				notification.sendOpenClose("opened",username);
+		}
 	}
 	else{
 		log.addLog("",username); //just in case the garage was half open/close, we still want to log this
+		if(userOnOff == 'on'){
+				notification.sendOpenClose("opened/closed",username);
+		}
 	}
-
 	buttonPress();
 });
 
