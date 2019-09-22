@@ -1,45 +1,35 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Garage Pi</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/assets/style.css">
-</head>
-<body>
+	<head>
+		<title>Garage Pi</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/assets/style.css">
+	</head>
+	<body>
+		<div class="page">
+			<div class="content">
+				<div style="display:block; overflow: auto;">
+					<form class="left" action="/settings">
+						<input type="submit" value="Back" />
+					</form>
+				</div>
+				<h2>Delete a user from Garage-Pi</h2>
+				<p style="font-size:0.75em">
+				You cannot delete the user you are currently logged in as.<br><br>
+				</p>
+			</div>
 
-<div class="page">
+			<div class="content">
+				<%if(typeof error != "undefined" && error == true){%>
+				   <div class="isa_error">Error Deleting User</div>
+				<%}%>
 
-  <div class="content">
-  
-    
-<div style="display:block; overflow: auto;">
-        <form class="left" action="/settings">
-                <input type="submit" value="Back" />
-        </form>
-</div>
- 
-  
-	<h4>Delete a user from Garage-Pi</h4>
-	<p style="font-size:0.75em">
-	You cannot delete the user you are currently logged in as.<br><br>
-	</p>
-  </div>
-  
-  <div class="content">
-  	<%if(typeof error != "undefined" && error == true){%>
-       <div class="isa_error">Error Deleting User</div>
-    <%}%>
-    
-    <form class="login-form" method="post">
-      <input type="text" name="username1" placeholder="username to delete"/>
-      <input type="text" name="username2" placeholder="type again to verify"/>
-      <button>Delete User</button>
-    </form>
-    
-  </div>
-</div>
-
-</body>
+				<form class="login-form" method="post">
+				  <input type="text" name="username1" placeholder="username to delete"/>
+				  <input type="text" name="username2" placeholder="type again to verify"/>
+				  <button>Delete User</button>
+				</form>
+			</div>
+		</div>
+	</body>
 </html>
-
-

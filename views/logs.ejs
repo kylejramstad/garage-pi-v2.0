@@ -1,56 +1,46 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Garage Pi</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/assets/style.css">
-</head>
-<body>
-
-<div class="page">
-
-  <div class="content">
+	<head>
+		<title>Garage Pi</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/assets/style.css">
+	</head>
+	<body>
+		<div class="page">
+		  <div class="content">
+			<div style="display:block; overflow: auto;">
+				<form class="left" action="/settings">
+					<input type="submit" value="Back" />
+				</form>
+			</div>
+			<h2>Logs</h2>
+			<p><strong>How many logs would you like Garage-Pi to keep?</strong>
+			<br><em>You can pick a number from 0 (no logs) to 1000</em></p>
+		  </div>
   
-    
-<div style="display:block; overflow: auto;">
-        <form class="left" action="/settings">
-                <input type="submit" value="Back" />
-        </form>
-</div>
-
-	<h4>How many logs would you like Garage-Pi to keep?</h4>
-	<p>You can pick a number from 0 (no logs) to 1000</p>
-  </div>
+		  <div class="content">
+			<%if(typeof error != "undefined" && error == true){%>
+			   <div class="isa_error">Must use a number between 0-1000</div>
+			<%}%>
+	
+			<%if(typeof success != "undefined" && success == true){%>
+			   <div class="isa_success">Log has been successfully updated</div>
+			<%}%>
+			<form class="login-form" method="post">
+				<input type="number" name="number" min="0" max="1000" placeholder=<%=size%>>
+				<button>Change Log</button>
+			</form>
+		  </div>    
   
-  <div class="content">
-  	<%if(typeof error != "undefined" && error == true){%>
-       <div class="isa_error">Must use a number between 0-1000</div>
-    <%}%>
-    
-    <%if(typeof success != "undefined" && success == true){%>
-       <div class="isa_success">Log has been successfully updated</div>
-    <%}%>
-    
-    <form class="login-form" method="post">
-		<input type="number" name="number" min="0" max="1000" placeholder=<%=size%>>
-      	<button>Change Log</button>
-    </form>
-  </div>    
-  
-  <div class="content">	 
-  	 <%if(typeof reset != "undefined" && reset == true){%>
-       <div class="isa_success">Logs have been reset</div>
-    <%}%>
-  
-  	<p><strong>This will erase all your logs</strong></p>
-    <form class="login-form" method="post">
-      	<button>Reset Logs</button>
-    </form>
-    
-  </div>
-</div>
-
-</body>
+		  <div class="content">	 
+			 <%if(typeof reset != "undefined" && reset == true){%>
+			   <div class="isa_success">Logs have been reset</div>
+			<%}%>
+			<p><strong>This will erase all your logs</strong></p>
+			<form class="login-form" method="post">
+				<button>Reset Logs</button>
+			</form>
+		  </div>
+		</div>
+	</body>
 </html>
-
-

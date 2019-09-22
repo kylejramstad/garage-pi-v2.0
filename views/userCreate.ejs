@@ -1,59 +1,50 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Garage Pi</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/assets/style.css">
-</head>
-<body>
+	<head>
+		<title>Garage Pi</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/assets/style.css">
+	</head>
+	<body>
+		<div class="page">
+			<div class="content">
+				<div style="display:block; overflow: auto;">
+					<form class="left" action="/settings">
+						<input type="submit" value="Back" />
+					</form>
+				</div>
+				<h2>Create a new user for Garage-Pi.</h2>
+				<ul style="font-size:0.75em">
+					<li>The password must be at least 10 and fewer than 128 characters long.</li>
+					<li>The password may not contain sequences of three or more repeated characters.</li>
+					<li>The password must contain at least one lowercase letter.</li>
+					<li>The password must contain at least one uppercase letter.</li>
+					<li>The password must contain at least one number.</li>
+					<li>The password must contain at least one special character.</li>
+				</ul>
+			</div>
 
-<div class="page">
+			<div class="content">
+				<%if(typeof exists != "undefined" && exists == true){%>
+				   <div class="isa_error">User already exists</div>
+				<%}%>
 
-  <div class="content">
-  
-<div style="display:block; overflow: auto;">
-        <form class="left" action="/settings">
-                <input type="submit" value="Back" />
-        </form>
-</div>
-  
-	<h4>Create a new user for Garage-Pi.</h4>
-	<ul style="font-size:0.75em">
-	<li>The password must be at least 10 and fewer than 128 characters long.</li>
-	<li>The password may not contain sequences of three or more repeated characters.</li>
-	<li>The password must contain at least one lowercase letter.</li>
-    <li>The password must contain at least one uppercase letter.</li>
-    <li>The password must contain at least one number.</li>
-    <li>The password must contain at least one special character.</li>
-	</ul>
-  </div>
-  
-  <div class="content">
-  
-    <%if(typeof exists != "undefined" && exists == true){%>
-       <div class="isa_error">User already exists</div>
-    <%}%>
-    
-    <%if(typeof errors != "undefined"){%>
-    <div class="isa_error" style="font-size:0.6em">
-    <ul>
-    <% for(var i = 0 ; i < errors.length ; i++) { %>
-           <li><%= errors[i] %></li>
-	<% } %>
-	</ul>
-    </div>
-    <%}%>
-  
-    <form class="login-form" method="post">
-      <input type="text" name="username" placeholder="username"/>
-      <input type="password" name="password" placeholder="password"/>
-      <input type="password" name="password2" placeholder="verify password"/>
-      <button>Create User</button>
-    </form>
-  </div>
-</div>
-
-</body>
+				<%if(typeof errors != "undefined"){%>
+					<div class="isa_error" style="font-size:0.6em">
+					<ul>
+					<% for(var i = 0 ; i < errors.length ; i++) { %>
+						   <li><%= errors[i] %></li>
+					<% } %>
+					</ul>
+					</div>
+				<%}%>
+				<form class="login-form" method="post">
+				  <input type="text" name="username" placeholder="username"/>
+				  <input type="password" name="password" placeholder="password"/>
+				  <input type="password" name="password2" placeholder="verify password"/>
+				  <button>Create User</button>
+				</form>
+			</div>
+		</div>
+	</body>
 </html>
-
-

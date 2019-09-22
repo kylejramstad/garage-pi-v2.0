@@ -1,52 +1,72 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Garage Pi</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="./assets/style.css">
-</head>
-<body>
+	<head>
+		<title>Garage Pi</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/assets/style.css">
+		<style>
+		.column {
+		  float: left;
+		  width: 50%;
+		}
 
-<div class="page">
+		/* Clear floats after the columns */
+		.row:after {
+		  content: "";
+		  display: table;
+		  clear: both;
+		}
+		</style>
+	</head>
+	<body>
+		<div class="page">
+			  <div class="content">
+				<div style="display:block; overflow: auto;">
+						<form class="left" action="/">
+								<input type="submit" value="Back" />
+						</form>
+				</div>
+				<h2>Settings</h2>
+				<div class="row">
+				  <div class="column">
+				  	<h3>Users</h3>
+					<ul>
+						<li><a href="/settings/users?type=create">Create New User</a></li>
+						<li><a href="/settings/users?type=delete">Delete a User</a></li>
+						<li><a href="/settings/users?type=change">Change user password</a></li>
+						<li><a href="/settings/assistant">Voice Assistant Setup</a></li>
+					</ul>
+				  </div>
+				  <div class="column">
+				  	<h3>Configuration</h3> 
+					<ul>
+						<li><a href="/settings/cert">SSL/TLS Certificate</a></li>
+						<li><a href="/settings/logs">Logs</a></li>
+						<li><a href="/settings/timer">Auto Close Timer</a></li>
+						<li><a href="/settings/pins">Raspberry Pi GPIO Pins</a></li>
+						<li><a href="/settings/notification">Push Notifications</a></li>
+					</ul>
+				  </div>
+				</div>
+	
+				<div style="text-align:center">    
+					<a target="_blank" href="https://github.com/kylejramstad/garage-pi-v2">Visit This Project on Github</a>
+				</div>
+			  </div>
 
-  <div class="content">
+			<div class="content">
+				<h2>Acknowledgements</h2>
+				<ul style="font-size:0.75em">
+					<li>Original Garage-Pi Created by Tyler Jones at <a  target="_blank" href="https://howchoo.com/g/yznmzmuxywu/how-to-control-your-garage-door-from-your-phone-using-a-raspberry-pi#comments">Howchoo.com</a> and on <a target="_blank" href="https://github.com/Howchoo/garage-pi">Github</a></li>
+					<li>Favicon made by <a target="_blank" href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a target="_blank" href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></li>
+				</ul>
+			</div>
 
-<div style="display:block; overflow: auto;">
-        <form class="left" action="/">
-                <input type="submit" value="Back" />
-        </form>
-</div>
-
-	<h4>Settings</h4>
-		<ul>
-		<li><a href="/settings/users?type=create">Create New User</a></li>
-		<li><a href="/settings/users?type=delete">Delete a User</a></li>
-		<li><a href="/settings/users?type=change">Change user password</a></li>
-		<li><a href="/settings/assistant">Voice Assistant Setup</a></li>
-		<li><a href="/settings/cert">Download SSL/TLS Certificate</a></li>
-		<li><a href="/settings/logs">Logs</a></li>
-		<li><a href="/settings/pins">Configure Raspberry Pi GPIO Pins</a></li>
-		<li><a href="/settings/timer">Auto Close Timer</a></li>
-		<li><a href="/settings/notification">Configure Push Notifications</a></li>
-		<li><a target="_blank" href="https://github.com/kylejramstad/garage-pi-v2.0">Link to project on Github</a></li>
-	</ul>
-  </div>
-
-<div class="content">
-	<h4>Acknowledgements</h4>
-	<ul style="font-size:0.75em">
-	<li>Original Garage-Pi Created by Tyler Jones at <a  target="_blank" href="https://howchoo.com/g/yznmzmuxywu/how-to-control-your-garage-door-from-your-phone-using-a-raspberry-pi#comments">Howchoo.com</a> and on <a target="_blank" href="https://github.com/Howchoo/garage-pi">Github</a></li>
-	<li>Favicon made by <a target="_blank" href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a target="_blank" href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></li>
-	</ul>
-</div>
-
-<div class="content">
-<p style="text-align:center;">
-<a rel="license" target="_blank" href="https://github.com/kylejramstad/garage-pi-v2.0/blob/master/LICENSE.md"><img src="/assets/license-logo.png"/><br/>This work is licensed under GNU General Public License v3</a>.
-</p>
-</div>
-</div>
-</body>
+			<div class="content">
+				<p style="text-align:center;">
+				<a rel="license" target="_blank" href="https://github.com/kylejramstad/garage-pi-v2.0/blob/master/LICENSE.md"><img src="/assets/license-logo.png"/><br/>This work is licensed under GNU General Public License v3</a>.
+				</p>
+			</div>
+		</div>
+	</body>
 </html>
-
-

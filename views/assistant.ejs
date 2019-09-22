@@ -1,75 +1,66 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Garage Pi</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/assets/style.css">
-</head>
-<body>
-
-<div class="page">
-
-  <div class="content">
-  
-<div style="display:block; overflow: auto;">
-        <form class="left" action="/settings">
-                <input type="submit" value="Back" />
-        </form>
-</div>
-  
-	<h4>Setup your assistant with IFTTT</h4>
-  </div>
-  
-<%if(typeof username != "undefined" && typeof password != "undefined"){%>
-  <div class="content">
-        <p>These instructions are unique to you. <strong>DO NOT SHARE!!!</strong></p>
-        <ul style="font-size:0.75em">
-                <li>Create a new applet on <a href="https://ifttt.com/create" target="_blank">IFTTT</a></li>
-                <li>For "This", select Google Assistant or Amazon Alexa</li>
-                <li>Choose "Say a simple phrase"</li>
-                <li>Enter the following information:</li>
-                <ul>
-                        <li>"What do you want to say?": Open the garage</li>
-                        <li>"What do you want the Assistant to say in response?": Opening the garage</li>
-                </ul>
-                <li>Click "Create Trigger"</li>
-                <li>For "That", select Webhooks</li>
-                <li>Choose "Make a web request"</li>
-                <li>Enter the following information:</li>
-                <ul>
-                        <li>"URL"<br>https://&lt;YOUR IP&gt;/assistant?open=true&username=<%= username %>&password=<%= password %></li>
-                        <li>NOTE: THIS URL IS UNIQUE TO YOUR GARAGE-PI!</li>
-                        <li>NOTE: Make sure you replace the ip address with your own!</li>
-                </ul>
-                <li>Leave everything else the same</li>
-                <li>Save your applet and create a new applet for closing the garage<br>using "close" instead of "open" in the trigger and url</li>
-                <ul>
-                        <li>"URL"<br>https://&lt;YOUR IP&gt;/assistant?close=true&username=<%= username %>&password=<%= password %></li>
-                        <li>NOTE: THIS URL IS UNIQUE TO YOUR GARAGE-PI!</li>
-                        <li>NOTE: Make sure you replace the ip address with your own!</li>
-                </ul>
-        </ul>
-  </div>
-<%} else{%>
-	<div class="content">
-		<%if(typeof deleted != "undefined" && deleted == true){%>
-       		<div class="isa_success">Assistant was successfully deleted</div>
-    	<%}%>
-		<form action="./assistant?deleted=true" class="login-form" method="post">
-			<button>Deactivate Assistant</button>
-		</form>
-	</div>
-	<div class="content">
-	<p><strong>This will erase a previous assistant username and password if you already created one.</strong></p>
-    <form action="./assistant?create=true" class="login-form" method="post">
-      <button>Create New Assistant Account</button>
-    </form>
-  </div>
-<%}%>
-  
-</div>
-
-</body>
+	<head>
+		<title>Garage Pi</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/assets/style.css">
+	</head>
+	<body>
+		<div class="page">
+			<div class="content">
+				<div style="display:block; overflow: auto;">
+					<form class="left" action="/settings">
+						<input type="submit" value="Back" />
+					</form>
+				</div>
+				<h2>Setup your Assistant with IFTTT</h2>
+			</div>
+			<%if(typeof username != "undefined" && typeof password != "undefined"){%>
+			<div class="content">
+				<p>These instructions are unique to you. <strong>DO NOT SHARE!!!</strong></p>
+				<ul style="font-size:0.75em">
+					<li>Create a new applet on <a href="https://ifttt.com/create" target="_blank">IFTTT</a></li>
+					<li>For "This", select Google Assistant or Amazon Alexa</li>
+					<li>Choose "Say a simple phrase"</li>
+					<li>Enter the following information:</li>
+					<ul>
+						<li>"What do you want to say?": Open the garage</li>
+						<li>"What do you want the Assistant to say in response?": Opening the garage</li>
+					</ul>
+					<li>Click "Create Trigger"</li>
+					<li>For "That", select Webhooks</li>
+					<li>Choose "Make a web request"</li>
+					<li>Enter the following information:</li>
+					<ul>
+						<li>"URL"<br>https://&lt;YOUR IP&gt;/assistant?open=true&username=<%= username %>&password=<%= password %></li>
+						<li>NOTE: THIS URL IS UNIQUE TO YOUR GARAGE-PI!</li>
+						<li>NOTE: Make sure you replace the ip address with your own!</li>
+					</ul>
+					<li>Leave everything else the same</li>
+					<li>Save your applet and create a new applet for closing the garage<br>using "close" instead of "open" in the trigger and url</li>
+					<ul>
+						<li>"URL"<br>https://&lt;YOUR IP&gt;/assistant?close=true&username=<%= username %>&password=<%= password %></li>
+						<li>NOTE: THIS URL IS UNIQUE TO YOUR GARAGE-PI!</li>
+						<li>NOTE: Make sure you replace the ip address with your own!</li>
+					</ul>
+				</ul>
+				</div>
+				<%} else{%>
+				<div class="content">
+				<%if(typeof deleted != "undefined" && deleted == true){%>
+					<div class="isa_success">Assistant was successfully deleted</div>
+				<%}%>
+				<form action="./assistant?deleted=true" class="login-form" method="post">
+					<button>Deactivate Assistant</button>
+				</form>
+				</div>
+				<div class="content">
+				<p><strong>This will erase a previous assistant username and password if you already created one.</strong></p>
+				<form action="./assistant?create=true" class="login-form" method="post">
+					<button>Create New Assistant Account</button>
+				</form>
+			</div>
+			<%}%>
+		</div>
+	</body>
 </html>
-
-

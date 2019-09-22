@@ -1,59 +1,55 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Garage Pi</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="./assets/style.css">
-</head>
-<body>
-<div class="page"><div class="content">
+	<head>
+		<title>Garage Pi</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/assets/style.css">
+		<link rel="manifest" href="/assets/manifest.json">
+	</head>
+	<body>
+		<div class="page">
+			<div class="content">
+				<div style="display:block; overflow: auto;">
+						<form class="left" action="/logout">
+								<input type="submit" value="Logout" />
+						</form>
 
-<div style="display:block; overflow: auto;">
-        <form class="left" action="/logout">
-                <input type="submit" value="Logout" />
-        </form>
-
-        <form class="right" action="/settings">
-                <input type="submit" value="Settings" />
-        </form>
-</div>
+						<form class="right" action="/settings">
+								<input type="submit" value="Settings" />
+						</form>
+				</div>
    
-    <%if(typeof create != "undefined" && create == true){%>
-       <div class="isa_success">New user was successfully created</div>
-    <%}%>
-    
-    <%if(typeof deleted != "undefined" && deleted == true){%>
-       <div class="isa_success">User was successfully deleted</div>
-    <%}%>
-    
-    <%if(typeof change != "undefined" && change == true){%>
-       <div class="isa_success">Password was successfully changed</div>
-    <%}%>
-    
-<p></p>
+				<%if(typeof create != "undefined" && create == true){%>
+				   <div class="isa_success">New user was successfully created</div>
+				<%}%>
 
-<div id="garage" class="garage"></div>
-</div>
+				<%if(typeof deleted != "undefined" && deleted == true){%>
+				   <div class="isa_success">User was successfully deleted</div>
+				<%}%>
 
-<div class="content" id="log">
-<table border="2">
-<tbody>
-<tr><td>Open/Close</td><td>Username</td><td>Date</td><td>Time</td></tr>
+				<%if(typeof change != "undefined" && change == true){%>
+				   <div class="isa_success">Password was successfully changed</div>
+				<%}%>    
+				<p></p>
+				<div id="garage" class="garage"></div>	
+			</div>
 
-<% for(var i = 0 ; i < log.length ; i++) { %>
-       <tr>
-            <td><%= log[i][0] %></td>
-            <td><%= log[i][1] %></td>
-            <td><%= log[i][2] %></td>
-            <td><%= log[i][3] %></td>
-       </tr>
-<% } %>
-
-</tbody>
-</table>
-</div>
-
-</div>
-<script src="/assets/bundle.js"></script>
-</body>
+			<div class="content" id="log">
+				<table border="2">
+				<tbody>
+				<tr><td>Open/Close</td><td>Username</td><td>Date</td><td>Time</td></tr>
+				<% for(var i = 0 ; i < log.length ; i++) { %>
+				   <tr>
+					<td><%= log[i][0] %></td>
+					<td><%= log[i][1] %></td>
+					<td><%= log[i][2] %></td>
+					<td><%= log[i][3] %></td>
+				   </tr>
+				<% } %>
+				</tbody>
+				</table>
+			</div>
+		</div>
+		<script src="/assets/bundle.js"></script>
+	</body>
 </html>
