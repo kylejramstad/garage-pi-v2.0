@@ -356,7 +356,7 @@ app.post('/settings/timer', auth, function(req, res){
 		clearInterval(openCheckInterval);
 		openCheck();
 		
-		res.render('timer.ejs', {success:true,time:" ",onOffSwitch:newOnOff});
+		res.render('timer.ejs', {success:true,time:"off",onOffSwitch:newOnOff});
 	}
 });
 
@@ -452,15 +452,19 @@ function buttonCheck(){
 
 var interval = 100; //How often to check in milliseconds
 var openCheckInterval;
+var currentTimer = timer.getTime();
+var currentOnOff = timer.getOnOff();
+var currentState = getState();
+
 openCheck();
 
 function openCheck(){
-	var currentTimer = timer.getTime();
-	var currentOnOff = timer.getOnOff();
-	var currentState = getState();
+	currentTimer = timer.getTime();
+	currentOnOff = timer.getOnOff();
+	currentState = getState();
 
 	openCheckInterval = setInterval(function (){
-		if(currentState.open && currentTimer <= 0 && currentOnOff){
+		if(currentState.open && currentTimer <= 0 && currentOnOff == 'on'){
 			clearInterval(openCheckInterval);
 			log.addLog("Close","Auto Close");
 			buttonPress();
@@ -469,8 +473,11 @@ function openCheck(){
 			}
 			openCheck();
 		} 
-		else if(currentState.open && currentTimer > 0 && currentOnOff){
+		else if(currentState.open && currentTimer > 0 && currentOnOff == 'on'){
 			currentTimer -= interval;
+		}
+		else if(currentState.close){
+			currentTimer = timer.getTime();
 		}
 		currentState = getState();	
 	},interval);
