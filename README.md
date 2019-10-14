@@ -73,6 +73,9 @@ Otherwise, you should setup a VPN in your home and tunnel into it before accessi
 - [x] Make download script so that user only types one line to install software
 - [x] Make it easy for users to set pins in the settings
 - [ ] Make instructions on how to set up a ddns service so that users can easily access garage-pi
+- [ ] Change Log to Calendar View for easier viewing of logs
+- [ ] Keep logs by the day/week/month
+- [ ] Consider logs be kept in database if there are going to be so much more of them
 
 ## Acknowledgements
 * Original Garage-Pi Created by Tyler Jones at Howchoo.com and on Github
