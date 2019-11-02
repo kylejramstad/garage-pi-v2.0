@@ -504,6 +504,7 @@ app.get('/relay', auth, function(req, res) {   //Open or Close garage with the r
 		}
 	}
 	buttonPress();
+	res.end();
 });
 
 //give pages access to the assets folder for JS and CSS files
