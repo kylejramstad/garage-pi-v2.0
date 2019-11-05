@@ -61,7 +61,7 @@
 					</form>
 				</div>
 				<h2>Configure Push Notifications</h2>
-				<em>You need to configure 2 applets on <a href="IFTTT.com">IFTTT.com</a> for notifications to work. Please see the instructions below.</em>
+				<em>You need to configure 2 applets on <a href="https://ifttt.com/maker_webhooks">IFTTT.com</a> for notifications to work. Please see the instructions below.</em>
 				<%if(typeof success != "undefined" && success == true){%>
 				   <div class="isa_success">Notifications have been successfully updated</div>
 				<%}%>
@@ -103,7 +103,7 @@
 						</label>
 					</div>
 					<br>
-					IFTTT Key<input type="text" name="key" placeholder=<%=key%>>
+					IFTTT Key<input type="text" name="key" value=<%=key%>>
 					<br>
 					
 					<button>Update Settings</button>

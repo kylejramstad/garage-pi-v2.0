@@ -47,17 +47,17 @@
 				</div>
 				<%} else{%>
 				<div class="content">
+				<p><strong>This will erase a previous assistant username and password if you already created one.</strong></p>
+				<form action="./assistant?create=true" class="login-form" method="post">
+					<button>Create New Assistant Account</button>
+				</form>
+			</div>
+				<div class="content">
 				<%if(typeof deleted != "undefined" && deleted == true){%>
 					<div class="isa_success">Assistant was successfully deleted</div>
 				<%}%>
 				<form action="./assistant?deleted=true" class="login-form" method="post">
 					<button>Deactivate Assistant</button>
-				</form>
-				</div>
-				<div class="content">
-				<p><strong>This will erase a previous assistant username and password if you already created one.</strong></p>
-				<form action="./assistant?create=true" class="login-form" method="post">
-					<button>Create New Assistant Account</button>
 				</form>
 			</div>
 			<%}%>
