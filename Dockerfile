@@ -13,7 +13,4 @@ COPY . /code
 # Install
 RUN ./scripts/install.sh
 
-# Expose the port
-# The app listens at port 443
-EXPOSE 443
 CMD ["npm", "start"]

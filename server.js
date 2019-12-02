@@ -3,6 +3,7 @@
 const express = require('express');
 const rpio = require('rpio');
 const https = require('https');
+const http = require('http');
 const fs = require('fs')
 const favicon = require('express-favicon');
 const login = require('./login.js');
@@ -21,6 +22,11 @@ const app = express();
 app.disable('x-powered-by'); //not technically needed because of the use of helmet, but it is recommended
 
 //Middleware//
+app.use(function(req, res, next) {
+
+  next();
+});
+
 app.use(helmet());
 app.use(helmet.noCache());
 app.use(favicon(__dirname + '/assets/icons/icon-72x72.png'));
@@ -39,12 +45,17 @@ app.use(session({
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-// Authentication and Authorization Middleware
+// Authentication and Authorization Middleware //Also forces https
 var auth = function(req, res, next) {
-	if (req.session && req.session.admin) //if signed in then continue
-		return next();
-	else
-		return res.redirect('/login'); //redirect to login page
+	if(!req.secure) {
+    	return res.redirect(['https://', req.get('Host'), req.baseUrl].join(''));
+  	}
+  	else{
+		if (req.session && req.session.admin) //if signed in then continue
+			return next();
+		else
+			return res.redirect('/login'); //redirect to login page
+  	}
 };
 
 
@@ -508,17 +519,23 @@ app.get('/relay', auth, function(req, res) {   //Open or Close garage with the r
 });
 
 //give pages access to the assets folder for JS and CSS files
-app.use('/assets', express.static('assets'))
+app.use('/assets', express.static('assets'));
+app.use(express.static(__dirname + '/tls', { dotfiles: 'allow' } ));
 
 //To catch all false routes and redirect them back to the home page
 app.use(function(req, res, next){
 	res.status(404).redirect('/');
 });
 
+//Start HTTP App
+http.createServer(app).listen(80, () => {
+  console.log('Listening...');
+});
+
 //Start App with HTTPS
 https.createServer({
-  key: fs.readFileSync('ssl/Leaf.PrivateKey.pem'),
-  cert: fs.readFileSync('ssl/LeafAndIntermediate.Cert.pem')
+  key: fs.readFileSync('tls/privkey.pem'),
+  cert: fs.readFileSync('tls/fullchain.pem')
 }, app).listen(443, () => {
-  console.log('Listening...')
+  console.log('Listening...');
 });
