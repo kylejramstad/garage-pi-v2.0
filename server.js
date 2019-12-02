@@ -108,15 +108,6 @@ app.get('/settings', auth, function(req, res) {
 	res.render('settings.ejs');
 });
 
-app.get('/settings/cert', auth, function(req, res) {
-	res.render('certDownload.ejs');
-});
-
-app.get('/settings/cert/download', auth, function(req, res){
-	const file = __dirname + '/ssl/IntermediateAndRoot.Cert.crt';
-	res.download(file,'certificate.crt');
-});
-
 app.get('/settings/pins', auth, function(req, res) {
 	res.render('pins.ejs', {open:openPinNum,close:closePinNum,relay:relayPinNum});
 });
