@@ -16,18 +16,34 @@ You can find the [original setup instructions on howchoo](https://howchoo.com/g/
 ### Setup Rasbian
 You can find instuctions on [How to set up your Raspberry Pi without a keyboard, monitor, or mouse on howchoo](https://howchoo.com/g/mzgzy2mwowj/how-to-set-up-raspberry-pi-without-keyboard-monitor-mouse).
 
+### Setup DDNS Service
+**This is extremely dangerous. Only do this if you understand the risks involved.**
+1. Go to a DDNS service provider [Dynu.com](https://www.dynu.com) is recommended
+1. Create a dynamic DNS domain with the provider
+   - Make sure you link the domain to your IPv4 and/or IPv6 address [whatismyipaddress.com](https://whatismyipaddress.com/)
+1. This domain will be used to access your garage and during the installation process
+1. Make sure that if your IP address changes that dynu.com updates the DDNS record
+   - Follow the instructions here [https://www.dynu.com/DynamicDNS/IPUpdateClient/RaspberryPi-Dynamic-DNS](https://www.dynu.com/DynamicDNS/IPUpdateClient/RaspberryPi-Dynamic-DNS)
+
+### Port Forwarding
+**This will make your network visible to the public internet.**
+**Make sure you have correctly configured your router and any firewalls.**
+- [Access your Raspberry Pi over the internet](https://www.raspberrypi.org/documentation/remote-access/access-over-Internet/README.md)
+  - You'll need to find your routers manual to learn how to configure port fowarding to **Port 443 and Port 80** on your Pi.
+**You need to forward external ports 443 and 80 to internal ports 443 and 80 respectively**
+
 ### Install Garage-Pi-v2 From Repository (faster)
 1. Open up a terminal
 1. ssh into your Pi
    - ```ssh pi@192.168.1.1```
    - Use the IP address of your Pi
    - default password is "raspberry"
-1. Download Docker, Garage-Pi, and then run
-   - ```curl -sSL https://raw.githubusercontent.com/kylejramstad/garage-pi-v2/master/scripts/download.sh | bash```
-       - add parameters to this command to add more DNS alt_names
-       - For example: ```curl -sSL https://raw.githubusercontent.com/kylejramstad/garage-pi-v2/master/scripts/download.sh | bash -s example.com sub.example.com```
+1. Download Docker & Garage-Pi by running
+   - ```curl -sSL https://raw.githubusercontent.com/kylejramstad/garage-pi-v2/master/scripts/download.sh | bash -s example.com admin@example.com```
+   - Don't forget to replace "example.com" and "admin@example.com" in the line above with your own domain and email address
 
 ### Building Garage-Pi-v2 From Source (longer)
+**Don't do this step if you installed Garage-Pi-v2 from repository**
 1. Open up a terminal
 1. ssh into your Pi
    - ```ssh pi@192.168.1.1```
@@ -39,40 +55,21 @@ You can find instuctions on [How to set up your Raspberry Pi without a keyboard,
 1. Copy the source files to the Pi from Github
    - ```sudo git clone https://github.com/kylejramstad/garage-pi-v2.git```
 1. Build the Docker Image
-   - ```sudo ./garage-pi-v2/scripts/build.sh```
+   - ```sudo ./garage-pi-v2/scripts/build.sh example.com admin@example.com```
+   - Don't forget to replace "example.com" and "admin@example.com" in the line above with your own domain and email address
    - This may take some time (about 60 minutes)
-       - add parameters to this command to add more DNS alt_names
-       - For example: ```sudo ./garage-pi-v2/scripts/build.sh example.com sub.example.com```
    
-## First Time Use and SSL/TLS Download
-1. Open a web browser to https://192.168.1.1
-   - Use the IP address of your Pi
+## First Time Use
+1. Open a web browser to the domain you setup
+   - You should notice that a http address should redirect to a https address
 1. Follow the onscreen instructions to create your first user
-1. After logging in, click the setting to add users, delete users, change your password, setup your Amazon Alexa or Google Assistant, adjust the logs, and to **download and install the SSL/TLS certificate** *(This will stop those warnings when visiting the page)*
+1. After logging in, click the setting to add users, delete users, change your password, setup your Amazon Alexa or Google Assistant, adjust the logs, etc.
 
-## Port Forwarding and Making Garage-Pi-v2 Public to the Internet
-**This is extremely dangerous. Only do this if you understand the risks involved.**
-Otherwise, you should setup a VPN in your home and tunnel into it before accessing the Garage-Pi interface page.
-
-*You cannot use the voice assistant feature if your Pi is not accessable from the public internet.*
-
-- [Access your Raspberry Pi over the internet](https://www.raspberrypi.org/documentation/remote-access/access-over-Internet/README.md)
-  - You'll need to find your routers manual to learn how to configure port fowarding to **Port 443** on your Pi.
-- [How to make your own Raspberry Pi VPN](https://howchoo.com/g/nzu3zdnjzti/raspberry-pi-vpn)
 
 ## TODO
+- [ ] Only allow admin user to delete other users (first user is considered admin)
 - [ ] Add PWA components for iOS compatibility
 - [ ] Allow for multiple garage door openers
-- [ ] Reduce build time below 1 hour
-- [x] Timer to close garage if left open too long (allow user to set time)
-- [ ] Only allow admin user to delete other users (first user is considered admin)
-- [x] Show users how many logs they currently keep
-- [x] Add notifications via ifttt webhooks (auto close, open or close manually, open closed by user, left partially open)
-- [x] Allow user to disable voice assistant
-- [x] Create new certificates and keys automatically if installed from repository
-- [x] Make download script so that user only types one line to install software
-- [x] Make it easy for users to set pins in the settings
-- [ ] Make instructions on how to set up a ddns service so that users can easily access garage-pi
 - [ ] Change Log to Calendar View for easier viewing of logs
 - [ ] Keep logs by the day/week/month
 - [ ] Consider logs be kept in database if there are going to be so much more of them
