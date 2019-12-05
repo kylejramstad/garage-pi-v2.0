@@ -22,11 +22,6 @@ const app = express();
 app.disable('x-powered-by'); //not technically needed because of the use of helmet, but it is recommended
 
 //Middleware//
-app.use(function(req, res, next) {
-
-  next();
-});
-
 app.use(helmet());
 app.use(helmet.noCache());
 app.use(favicon(__dirname + '/assets/icons/icon-72x72.png'));
