@@ -320,6 +320,7 @@ app.get('/assistant', function(req, res) { //Google Assistant API Call. Used wit
 			buttonPress();
 		}
 	}
+	res.end();
 });
 
 app.get('/settings/timer', auth, function(req, res){
