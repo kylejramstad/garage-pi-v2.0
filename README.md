@@ -1,6 +1,13 @@
 # garage-pi-v2
 
-Control your garage door using a web application running on your Raspberry Pi 3.
+Control your garage door using a web application running on your Raspberry Pi.
+
+## Compatibility
+- [x] Raspberry Pi 3 Model B - Rasbian Stretch
+- [x] Rasberry Pi 3 Model B+ - Rasbian Stretch
+- [ ] Raspberry Pi 3 Model B - Rasbian Buster
+- [ ] Rasberry Pi 3 Model B+ - Rasbian Buster
+- [ ] Rasberry Pi 4 Model B - Rasbian Buster
 
 ## Setup for V2
 
