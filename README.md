@@ -67,6 +67,7 @@ You can find instuctions on [How to set up your Raspberry Pi without a keyboard,
 
 
 ## TODO
+- [ ] Update Image so that it doesn't have certdownload.ejs
 - [ ] Only allow admin user to delete other users (first user is considered admin)
 - [ ] Add PWA components for iOS compatibility
 - [ ] Allow for multiple garage door openers
