@@ -4,7 +4,8 @@ const express = require('express');
 const rpio = require('rpio');
 const https = require('https');
 const http = require('http');
-const fs = require('fs')
+const fs = require('fs');
+checkDatabases();
 const favicon = require('express-favicon');
 const login = require('./login.js');
 const log = require('./log.js');
@@ -12,7 +13,7 @@ const pins = require('./pins.js');
 const timer = require('./timer.js');
 const notification = require('./notification.js');
 const crypto = require('crypto');
-const helmet = require('helmet')
+const helmet = require('helmet');
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 const bodyParser = require('body-parser');
@@ -20,6 +21,20 @@ const owasp = require('owasp-password-strength-test');
 
 const app = express();
 app.disable('x-powered-by'); //not technically needed because of the use of helmet, but it is recommended
+
+function checkDatabases(){
+	if(!fs.existsSync('/code/databases')){ //Create the databases if they don't exist
+		fs.mkdir('/code/databases', { recursive: true }, (err) => {
+			if (err) return;
+		});
+		var files = ['logs.json','notification.json','pins.json','timer.json','users.json'];
+		files.forEach(element => { 
+			fs.copyFile('/code/sample-databases/'+element, '/code/databases/'+element, err => {
+				if (err) return;
+			});
+		}); 
+	}
+}
 
 //Middleware//
 app.use(helmet());
