@@ -43,7 +43,7 @@ app.use(helmet.noCache());
 app.use(favicon(__dirname + '/assets/icons/icon-72x72.png'));
 app.use(session({
 	store: new FileStore,
-	secret: 'D0-y0u-think-anyone-can-guess',
+	secret: login.genRandomString(15),
 	name: 'sessionId',
 	resave: true,
 	saveUninitialized: false,
