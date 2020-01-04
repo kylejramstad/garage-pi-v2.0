@@ -5,7 +5,7 @@ const rpio = require('rpio');
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
-checkDatabases();
+checkDatabases(); //Need to check before the rest of the const are created because they use the databases
 const favicon = require('express-favicon');
 const login = require('./login.js');
 const log = require('./log.js');
@@ -19,9 +19,10 @@ const FileStore = require('session-file-store')(session);
 const bodyParser = require('body-parser');
 const owasp = require('owasp-password-strength-test');
 
-const app = express();
+const app = express(); //Create app
 app.disable('x-powered-by'); //not technically needed because of the use of helmet, but it is recommended
 
+//Check to see if the databases exist. They wont exist if this is the first time running.
 function checkDatabases(){
 	if(!fs.existsSync('/code/databases')){ //Create the databases if they don't exist
 		fs.mkdir('/code/databases', { recursive: true }, (err) => {
@@ -417,11 +418,41 @@ app.post('/settings/notification', auth, function(req, res){
 	res.render('notification.ejs', {success:true,autoCloseSwitch:autoOnOff,userCloseSwitch:userOnOff,buttonCloseSwitch:buttonOnOff,key:iftttKey});
 });
 
-
 //API calls//
 app.get('/status', auth, function(req, res) { //For the react components to read the GPIO PINS
   res.send(JSON.stringify(getState()));
 });
+
+app.get('/relay', auth, function(req, res) {   //Open or Close garage with the relay
+	var username = req.session.user;
+	if(getState().open){
+		log.addLog("Close",username);
+		if(userOnOff == 'on'){
+				notification.sendOpenClose("closed",username);
+		}
+	}
+	else if(getState().close){
+		log.addLog("Open",username);
+		if(userOnOff == 'on'){
+				notification.sendOpenClose("opened",username);
+		}
+	}
+	else{
+		log.addLog("",username); //just in case the garage was half open/close, we still want to log this
+		if(userOnOff == 'on'){
+				notification.sendOpenClose("opened/closed",username);
+		}
+	}
+	buttonPress();
+	res.end();
+});
+
+function getState() {
+  return {
+	open: !rpio.read(openPin),
+	close: !rpio.read(closePin)
+  }
+}
 
 function buttonPress(){
 	clearInterval(check); //Stop checking for button because this was not a button push
@@ -432,13 +463,7 @@ function buttonPress(){
 	}, 1000);
 }
 
-function getState() {
-  return {
-	open: !rpio.read(openPin),
-	close: !rpio.read(closePin)
-  }
-}
-
+//Check for when a person using their garage's physical button to open the garage//
 var check;
 buttonCheck();
 
@@ -463,12 +488,12 @@ function buttonCheck(){
 	},100);
 }
 
+//Checking for how long the garage has been open//
 var interval = 100; //How often to check in milliseconds
 var openCheckInterval;
 var currentTimer = timer.getTime();
 var currentOnOff = timer.getOnOff();
 var currentState = getState();
-
 openCheck();
 
 function openCheck(){
@@ -496,33 +521,9 @@ function openCheck(){
 	},interval);
 }
 
-app.get('/relay', auth, function(req, res) {   //Open or Close garage with the relay
-	var username = req.session.user;
-	if(getState().open){
-		log.addLog("Close",username);
-		if(userOnOff == 'on'){
-				notification.sendOpenClose("closed",username);
-		}
-	}
-	else if(getState().close){
-		log.addLog("Open",username);
-		if(userOnOff == 'on'){
-				notification.sendOpenClose("opened",username);
-		}
-	}
-	else{
-		log.addLog("",username); //just in case the garage was half open/close, we still want to log this
-		if(userOnOff == 'on'){
-				notification.sendOpenClose("opened/closed",username);
-		}
-	}
-	buttonPress();
-	res.end();
-});
-
-//give pages access to the assets folder for JS and CSS files
-app.use('/assets', express.static('assets'));
-app.use(express.static(__dirname + '/tls', { dotfiles: 'allow' } ));
+//Start the app and server//
+app.use('/assets', express.static('assets')); //give pages access to the assets folder for JS and CSS files
+app.use(express.static(__dirname + '/tls', { dotfiles: 'allow' } )); //Allows for CertBot to do automatic authentication
 
 //To catch all false routes and redirect them back to the home page
 app.use(function(req, res, next){
