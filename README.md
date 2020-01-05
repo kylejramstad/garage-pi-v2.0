@@ -3,7 +3,6 @@
 Control your garage door using a web application running on your Raspberry Pi.
 
 ## Compatibility
-
 ### Hardware
 - [x] Raspberry Pi 2 Model B 
 - [x] Raspberry Pi  2 Model B v1.2 
@@ -79,7 +78,6 @@ You can find instuctions on [How to set up your Raspberry Pi without a keyboard,
 
 
 ## TODO
-- [ ] Update Image so that it doesn't have certdownload.ejs
 - [ ] Only allow admin user to delete other users (first user is considered admin)
 - [ ] Add PWA components for iOS compatibility
 - [ ] Allow for multiple garage door openers
