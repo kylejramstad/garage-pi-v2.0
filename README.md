@@ -5,9 +5,9 @@ Control your garage door using a web application running on your Raspberry Pi.
 ## Compatibility
 - [x] Raspberry Pi 3 Model B - Rasbian Stretch
 - [x] Rasberry Pi 3 Model B+ - Rasbian Stretch
-- [ ] Raspberry Pi 3 Model B - Rasbian Buster
-- [ ] Rasberry Pi 3 Model B+ - Rasbian Buster
-- [ ] Rasberry Pi 4 Model B - Rasbian Buster
+- [x] Raspberry Pi 3 Model B - Rasbian Buster
+- [x] Rasberry Pi 3 Model B+ - Rasbian Buster
+- [x] Rasberry Pi 4 Model B - Rasbian Buster
 
 ## Setup for V2
 
@@ -74,7 +74,6 @@ You can find instuctions on [How to set up your Raspberry Pi without a keyboard,
 
 
 ## TODO
-- [ ] Update Image so that it doesn't have certdownload.ejs
 - [ ] Only allow admin user to delete other users (first user is considered admin)
 - [ ] Add PWA components for iOS compatibility
 - [ ] Allow for multiple garage door openers
