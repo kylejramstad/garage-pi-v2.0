@@ -3,11 +3,18 @@
 Control your garage door using a web application running on your Raspberry Pi.
 
 ## Compatibility
-- [x] Raspberry Pi 3 Model B - Rasbian Stretch
-- [x] Rasberry Pi 3 Model B+ - Rasbian Stretch
-- [ ] Raspberry Pi 3 Model B - Rasbian Buster
-- [ ] Rasberry Pi 3 Model B+ - Rasbian Buster
-- [ ] Rasberry Pi 4 Model B - Rasbian Buster
+
+### Hardware
+- [x] Raspberry Pi 2 Model B 
+- [x] Raspberry Pi  2 Model B v1.2 
+- [x] Raspberry Pi 3 Model B
+- [x] Rasberry Pi 3 Model B+
+- [x] Rasberry Pi 4 Model B
+
+### Rasbian Version
+- [x] Stretch
+- [x] Buster
+
 
 ## Setup for V2
 
@@ -46,8 +53,7 @@ You can find instuctions on [How to set up your Raspberry Pi without a keyboard,
    - Use the IP address of your Pi
    - default password is "raspberry"
 1. Download Docker & Garage-Pi by running
-   - ```curl -sSL https://raw.githubusercontent.com/kylejramstad/garage-pi-v2/master/scripts/download.sh | bash -s example.com admin@example.com```
-   - Don't forget to replace "example.com" and "admin@example.com" in the line above with your own domain and email address
+   - ```curl -sSL https://raw.githubusercontent.com/kylejramstad/garage-pi-v2/master/scripts/download.sh | bash```
 
 ### Building Garage-Pi-v2 From Source (longer)
 **Don't do this step if you installed Garage-Pi-v2 from repository**
@@ -62,8 +68,7 @@ You can find instuctions on [How to set up your Raspberry Pi without a keyboard,
 1. Copy the source files to the Pi from Github
    - ```sudo git clone https://github.com/kylejramstad/garage-pi-v2.git```
 1. Build the Docker Image
-   - ```sudo ./garage-pi-v2/scripts/build.sh example.com admin@example.com```
-   - Don't forget to replace "example.com" and "admin@example.com" in the line above with your own domain and email address
+   - ```sudo ./garage-pi-v2/scripts/build.sh --setup```
    - This may take some time (about 60 minutes)
    
 ## First Time Use
