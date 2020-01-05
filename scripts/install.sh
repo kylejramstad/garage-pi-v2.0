@@ -24,7 +24,7 @@ sudo pip install -U tzupdate
 sudo tzupdate
 
 # git WILL BE used for updating
-# sudo apt-get -y install git
+sudo apt-get -y install git
 
 
 # Installs all modules in package.json and checks for security issues and fix them
