@@ -319,21 +319,30 @@ app.get('/logout', auth, function (req, res) { // Logout by destroying the sessi
 });
 
 app.get('/assistant', function(req, res) { //Google Assistant API Call. Used with IFTTT
-	var username = req.query.username;
-	if(login.getUser(username)){
-		var password = req.query.password;
-		var salt = login.getUser(username).salt;
-		var hash = crypto.pbkdf2Sync(password, salt+username, 100000, 64, `sha512`).toString(`hex`);
-		if(login.getUser(username).hash == hash && ((req.query.open && getState().close)||(req.query.close && getState().open))){
-			
-			if(req.query.close){
-				log.addLog("Close",username);	
-			}
-			else if(req.query.open){
-				log.addLog("Open",username);	
-			}
+	var createdAt = req.query.time; //Get time the command was created at
+	createdAt = createdAt.replace(",", "");
+	createdAt = createdAt.replace("at", "\b");
+	createdAt = createdAt.slice(0, -2) + " " + createdAt.slice(-2);
+	var date = new Date(createdAt);
+	var minutes = date.getMinutes();
 	
-			buttonPress();
+	if (minutes == new Date().getMinutes()){
+		var username = req.query.username;
+		if(login.getUser(username)){
+			var password = req.query.password;
+			var salt = login.getUser(username).salt;
+			var hash = crypto.pbkdf2Sync(password, salt+username, 100000, 64, `sha512`).toString(`hex`);
+			if(login.getUser(username).hash == hash && ((req.query.open && getState().close)||(req.query.close && getState().open))){
+			
+				if(req.query.close){
+					log.addLog("Close",username);	
+				}
+				else if(req.query.open){
+					log.addLog("Open",username);	
+				}
+	
+				buttonPress();
+			}
 		}
 	}
 	res.end();

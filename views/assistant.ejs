@@ -32,14 +32,14 @@
 					<li>Choose "Make a web request"</li>
 					<li>Enter the following information:</li>
 					<ul>
-						<li>"URL"<br>https://&lt;YOUR IP&gt;/assistant?open=true&username=<%= username %>&password=<%= password %></li>
+						<li>"URL"<br>https://&lt;YOUR DOMAIN&gt;/assistant?open=true&username=<%= username %>&password=<%= password %>&time={{CreatedAt}}</li>
 						<li>NOTE: THIS URL IS UNIQUE TO YOUR GARAGE-PI!</li>
 						<li>NOTE: Make sure you replace the ip address with your own!</li>
 					</ul>
 					<li>Leave everything else the same</li>
 					<li>Save your applet and create a new applet for closing the garage<br>using "close" instead of "open" in the trigger and url</li>
 					<ul>
-						<li>"URL"<br>https://&lt;YOUR IP&gt;/assistant?close=true&username=<%= username %>&password=<%= password %></li>
+						<li>"URL"<br>https://&lt;YOUR DOMAIN&gt;/assistant?close=true&username=<%= username %>&password=<%= password %>&time={{CreatedAt}}</li>
 						<li>NOTE: THIS URL IS UNIQUE TO YOUR GARAGE-PI!</li>
 						<li>NOTE: Make sure you replace the ip address with your own!</li>
 					</ul>
