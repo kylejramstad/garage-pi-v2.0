@@ -116,7 +116,7 @@ app.get('/', auth, function(req, res) {
 });
 
 app.get('/settings', auth, function(req, res) {
-	res.render('settings.ejs');
+	res.render('settings.ejs', {version:process.env.npm_package_version});
 });
 
 app.get('/settings/pins', auth, function(req, res) {
@@ -541,4 +541,5 @@ https.createServer({
   cert: fs.readFileSync('tls/fullchain.pem')
 }, app).listen(443, () => {
   console.log('Listening...');
+  console.log('Version: ' + process.env.npm_package_version);
 });
