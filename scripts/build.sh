@@ -13,7 +13,7 @@ build (){
 }
 
 setup (){
-	sudo docker run --restart=always --device=/dev/mem:/dev/mem --name=garage-pi --privileged --publish 443:443 --publish 80:80 -d bugman000/garage-pi-v2
+	sudo docker run -v /etc/timezone:/etc/timezone --restart=always --device=/dev/mem:/dev/mem --name=garage-pi --privileged --publish 443:443 --publish 80:80 -d bugman000/garage-pi-v2
 	sudo docker exec -i garage-pi certbot certonly --webroot -w /code/tls -n --domains $d --agree-tos --email $e
 	sudo docker exec -i garage-pi sudo rm /code/tls/fullchain.pem
 	sudo docker exec -i garage-pi sudo rm /code/tls/privkey.pem

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Get latest code from github
-git fetch --all && git reset --hard origin/master
+sudo git fetch --all && git reset --hard origin/master
 
 # Move CertBot Certs back because git just downloaded the localhost temp certs
 # Remove localhost certs
@@ -19,4 +19,4 @@ sudo npm update
 sudo npm audit fix
 
 # Run webpack so that the bundle.js can be created if needed
-npx webpack --config webpack.config.js
+sudo npx webpack --config webpack.config.js
