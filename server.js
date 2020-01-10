@@ -5,6 +5,7 @@ const rpio = require('rpio');
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
 checkDatabases(); //Need to check before the rest of the const are created because they use the databases
 const favicon = require('express-favicon');
 const login = require('./login.js');
@@ -102,6 +103,32 @@ function setPins(open,close,relay){
 	pins.setRelayPin(relay);
 }
 
+function getScripts(){
+	var startPath = "/code/assets";
+	var filter = "bundle.js"
+    var results = [];
+
+    if (!fs.existsSync(startPath)){
+        //console.log("no dir ",startPath);
+        return;
+    }
+
+    var files=fs.readdirSync(startPath);
+    for(var i=0;i<files.length;i++){
+        var filename=path.join(startPath,files[i]);
+        var stat = fs.lstatSync(filename);
+        if (stat.isDirectory()){
+            //results = results.concat(findFilesInDir(filename,filter)); //recurse
+        }
+        else if (filename.indexOf(filter)>=0) {
+            //console.log('-- found: ',filename);
+            filename = filename.slice(5);
+            results.push(filename);
+        }
+    }
+    return results;
+}
+
 //Endpoints//
 app.get('/', auth, function(req, res) {
 	var create = false;
@@ -112,7 +139,7 @@ app.get('/', auth, function(req, res) {
 	if(req.query.deleted == 'true'){
 		deleted = true;
 	}
-	res.render('index.ejs', {log: log.getLogs().reverse(),create:create,deleted:deleted});
+	res.render('index.ejs', {scripts: getScripts(),create:create,deleted:deleted});
 });
 
 app.get('/settings', auth, function(req, res) {
@@ -430,6 +457,10 @@ app.post('/settings/notification', auth, function(req, res){
 //API calls//
 app.get('/status', auth, function(req, res) { //For the react components to read the GPIO PINS
   res.send(JSON.stringify(getState()));
+});
+
+app.get('/logs', auth, function(req, res) { //For the react components to read the logs
+  res.send(JSON.stringify(log.getLogs().reverse()));
 });
 
 app.get('/relay', auth, function(req, res) {   //Open or Close garage with the relay

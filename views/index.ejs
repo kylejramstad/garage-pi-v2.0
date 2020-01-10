@@ -31,25 +31,12 @@
 				   <div class="isa_success">Password was successfully changed</div>
 				<%}%>    
 				<p></p>
-				<div id="garage" class="garage"></div>	
+				<div id="garage" class="garage"></div>		
 			</div>
-
-			<div class="content" id="log">
-				<table border="2">
-				<tbody>
-				<tr><td>Open/Close</td><td>Username</td><td>Date</td><td>Time</td></tr>
-				<% for(var i = 0 ; i < log.length ; i++) { %>
-				   <tr>
-					<td><%= log[i][0] %></td>
-					<td><%= log[i][1] %></td>
-					<td><%= log[i][2] %></td>
-					<td><%= log[i][3] %></td>
-				   </tr>
-				<% } %>
-				</tbody>
-				</table>
-			</div>
+			<div class="content" id="log"></div>
 		</div>
-		<script src="/assets/bundle.js"></script>
+		<% for(var i = 0 ; i < scripts.length ; i++) { %>
+				   <script src= <%= scripts[i] %> ></script>
+		<% } %>
 	</body>
 </html>

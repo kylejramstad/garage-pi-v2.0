@@ -47,7 +47,7 @@ componentWillUnmount() {
     let { garageState } = this.state;
 
     if (!garageState) {
-      return '';
+      return 'Loading...';
     }
     
     if (garageState.open && garageState.close){

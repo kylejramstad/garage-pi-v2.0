@@ -1,6 +1,6 @@
 {
   "name": "garage_pi",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "Web endpoint to manage garage-pi.",
   "author": "Kyle Ramstad",
   "main": "server.js",
@@ -8,10 +8,13 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@babel/core": "^7.7.5",
+	"@babel/core": "^7.7.5",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/preset-env": "^7.7.6",
     "@babel/preset-react": "^7.7.4",
-    "axios": "",
+    "@material-ui/core": "^4.8.3",
+    "@material-ui/icons": "^4.5.1",
+    "axios": "^0.19.1",
     "babel-loader": "",
     "body-parser": "^1.19.0",
     "ejs": "^3.0.1",
@@ -21,6 +24,7 @@
     "helmet": "^3.21.2",
     "https": "^1.0.0",
     "owasp-password-strength-test": "",
+    "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "rpio": "^1.3.0",
