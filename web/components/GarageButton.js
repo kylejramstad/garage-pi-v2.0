@@ -4,7 +4,7 @@ const GarageButton = (props) => {
   let { sendRelay, buttonText } = props;
 
   return (
-    <button onClick={() => sendRelay()}>{buttonText}</button>
+    <button id="button" onClick={() => sendRelay()}>{buttonText}</button>
   )
 };
 

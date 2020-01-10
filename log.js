@@ -1,9 +1,9 @@
 const JSONdb = require('simple-json-db');
-const db = new JSONdb('./databases/logs.json');
+const db = new JSONdb('/code/databases/logs.json');
 const crypto = require("crypto");
 
 var addLog = function(open,user) {
-	var id = crypto.randomBytes(20).toString('hex'); //Makes a random event id so that we have unique entries in our log
+	var id = crypto.randomBytes(20).toString('hex'); //Makes a random event id so that we have unique entries in our log and the table can properly update when buttons are pressed
 	var today = new Date();
 	var date = (today.getMonth()+1)+'-'+today.getDate()+'-'+today.getFullYear();
 	
@@ -49,7 +49,7 @@ var getLogs = function(){
 
   for(var i in database){
 	if(i != "size")
-		result.push(database[i]);
+		result.push([i,database[i]]);
   }
   return result;
 }

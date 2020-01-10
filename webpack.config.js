@@ -14,7 +14,8 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         options: {
-          presets: ['@babel/react', '@babel/preset-env']
+          presets: ['@babel/react', '@babel/preset-env'],
+          plugins: ["@babel/plugin-proposal-class-properties"]
         }
       }
     ]
