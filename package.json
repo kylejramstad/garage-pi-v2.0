@@ -1,6 +1,6 @@
 {
   "name": "garage_pi",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Web endpoint to manage garage-pi.",
   "author": "Kyle Ramstad",
   "main": "server.js",

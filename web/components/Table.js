@@ -19,16 +19,15 @@ const useStyles1 = makeStyles(theme => ({
   root: {
     flexShrink: 0,
   },
+  button: {
+	  padding: '0px',
+  },
 }));
 
 function TablePaginationActions(props) {
   const classes = useStyles1();
   const theme = useTheme();
   const { count, page, rowsPerPage, onChangePage } = props;
-
-  const handleFirstPageButtonClick = event => {
-    onChangePage(event, 0);
-  };
 
   const handleBackButtonClick = event => {
     onChangePage(event, page - 1);
@@ -38,35 +37,18 @@ function TablePaginationActions(props) {
     onChangePage(event, page + 1);
   };
 
-  const handleLastPageButtonClick = event => {
-    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
 
   return (
     <div className={classes.root}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
-        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-      </IconButton>
-      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+      <IconButton className={classes.button} onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
         {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
       </IconButton>
-      <IconButton
+      <IconButton className={classes.button}
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
       >
         {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-      </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
-        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </div>
   );
@@ -86,12 +68,23 @@ const useStyles2 = makeStyles({
   nav: {
   	overflow: "visible",
   },
+  tablecell: {
+    fontSize: "0.5rem",
+    padding: '6px 2px 2px 6px',
+  },
+  tableHead: {
+  	fontSize: "0.6rem",
+  	padding: '6px 2px 2px 6px',
+  	fontWeight: 'bold',
+  },
 });
 
 const CustomPaginationActionsTable = (props) => {
   let { rows } = props;
 	   
   const classes = useStyles2();
+  const font = '0.5rem';
+  
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -108,37 +101,45 @@ const CustomPaginationActionsTable = (props) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="custom pagination table">
+      <Table size="small" className={classes.table} aria-label="custom pagination table">
         <TableBody>
+        <TableRow>
+        	<TableCell className={classes.tableHead}>{'Open/Close'}</TableCell>
+        	<TableCell className={classes.tableHead}>{'User'}</TableCell>
+        	<TableCell className={classes.tableHead}>{'Date'}</TableCell>
+        	<TableCell className={classes.tableHead}>{'Time'}</TableCell>
+        </TableRow>
           {(rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
           ).map(row => (
             <TableRow key={row[0]}>
-              <TableCell component="th" scope="row">
+              <TableCell component="th" scope="row" className={classes.tablecell}>
                 {row[1][0]}
               </TableCell>
-              <TableCell align="right">{row[1][1]}</TableCell>
-              <TableCell align="right">{row[1][2]}</TableCell>
-			  <TableCell align="right">{row[1][3]}</TableCell>
+              <TableCell className={classes.tablecell}>{row[1][1]}</TableCell>
+              <TableCell className={classes.tablecell}>{row[1][2]}</TableCell>
+			  <TableCell className={classes.tablecell}>{row[1][3]}</TableCell>
             </TableRow>
           ))}
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
-            </TableRow>
-          )}
         </TableBody>
         <TableFooter>
           <TableRow>
             <TablePagination className={classes.nav}
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={3}
+              colSpan={4}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
                 inputProps: { 'aria-label': 'rows per page' },
                 native: true,
+                style:{
+                  marginLeft: '0px',
+    			  marginRight: '0px',
+                  fontSize: font
+                }
               }}
+              labelRowsPerPage={<div style={{fontSize:font}}>{'Rows per Page:'}</div>}
+              labelDisplayedRows={row => <div style={{fontSize: font}}>{page * rowsPerPage+1 +'-'+((page * rowsPerPage) + rowsPerPage) + ' of ' + rows.length}</div>}
               onChangePage={handleChangePage}
               onChangeRowsPerPage={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
@@ -147,7 +148,6 @@ const CustomPaginationActionsTable = (props) => {
         </TableFooter>
       </Table>
     </TableContainer>
-
   );
 }
 export default CustomPaginationActionsTable

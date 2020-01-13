@@ -8,7 +8,6 @@ export default class LogContainer extends Component{
 	constructor() {
 		super();
 		this.state = {rows: []};
-		
 		this.updateRows = this.updateRows.bind(this);
 	}
 	
