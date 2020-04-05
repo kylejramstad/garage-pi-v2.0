@@ -81,9 +81,6 @@ You can find instuctions on [How to set up your Raspberry Pi without a keyboard,
 - [ ] Only allow admin user to delete other users (first user is considered admin)
 - [ ] Add PWA components for iOS compatibility
 - [ ] Allow for multiple garage door openers
-- [ ] Change Log to Calendar View for easier viewing of logs
-- [ ] Keep logs by the day/week/month
-- [ ] Consider logs be kept in database if there are going to be so much more of them
 
 ## Acknowledgements
 * Original Garage-Pi Created by Tyler Jones at Howchoo.com and on Github
