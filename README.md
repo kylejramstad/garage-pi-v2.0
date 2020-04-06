@@ -65,6 +65,7 @@ You can find instuctions on [How to set up your Raspberry Pi without a keyboard,
    - ```curl -sSL https://get.docker.com | sh```
    - This will run the install script right from docker.com
 1. Copy the source files to the Pi from Github
+   - ```sudo apt-get -y install git```
    - ```sudo git clone https://github.com/kylejramstad/garage-pi-v2.git```
 1. Build the Docker Image
    - ```sudo ./garage-pi-v2/scripts/build.sh --setup```

@@ -2,13 +2,16 @@
 #start at root of code
 cd /code
 # refreshing the repositories
-sudo apt-get update
+apt-get update
 
 # install sudo
-sudo apt-get -y install sudo
+apt-get -y install sudo
 
 # Time settings
 sudo apt-get -y install tzdata
+
+# install nano for crontab editing
+sudo apt-get -y install nano
 
 #Install certbot and cron
 sudo apt-get -y install cron
@@ -19,7 +22,9 @@ sudo crontab -l 2>/dev/null; echo "0 */12 * * * root /usr/bin/certbot renew -w /
 # This is the biggest part and takes a long time...
 # Needed to install node-gyp which is needed for rpio
 # Without rpio this project doesn't work
-sudo apt-get -y install python2.7
+sudo apt-get -y install python-setuptools
+sudo apt-get -y install build-essential
+sudo npm install rpio
 
 # git used for updating
 sudo apt-get -y install git
