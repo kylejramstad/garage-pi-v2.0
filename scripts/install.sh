@@ -1,4 +1,5 @@
 #!/bin/bash
+#Script runs in docker container
 #start at root of code
 cd /code
 # refreshing the repositories

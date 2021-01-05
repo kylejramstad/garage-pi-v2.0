@@ -27,7 +27,7 @@ You can find the [original setup instructions on howchoo](https://howchoo.com/g/
 ![alt text](https://www.bigmessowires.com/wp-content/uploads/2018/05/Raspberry-GPIO.jpg "Physical Pinout Diagram")
 
 ### Setup Rasbian
-You can find instuctions on [How to set up your Raspberry Pi without a keyboard, monitor, or mouse on howchoo](https://howchoo.com/g/mzgzy2mwowj/how-to-set-up-raspberry-pi-without-keyboard-monitor-mouse).
+You can find instuctions on [How to set up your Raspberry Pi without a keyboard, monitor, or mouse](https://desertbot.io/blog/headless-raspberry-pi-3-bplus-ssh-wifi-setup).
 
 ### Setup DDNS Service
 **This is extremely dangerous. Only do this if you understand the risks involved.**

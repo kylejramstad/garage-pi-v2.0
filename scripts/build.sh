@@ -1,10 +1,12 @@
 #!/bin/bash
+#To be run by a user building the docker container
 print_help () {
 	echo "usage: build.sh [options]"
 	echo "	options:"
-	echo "		-d, --distro	Create a Garage-Pi-v2 image for distribution"
-	echo "		-h, --help	Display this help message"
-	echo "		-s, --setup	Setup Garage-Pi-v2"
+	echo "		-d, --distro		Create a Garage-Pi-v2 image for distribution"
+	echo "		-h, --help		Display this help message"
+	echo "		-s, --setup		Setup Garage-Pi-v2"
+	echo "		-n, --no-cert		Setup Garage-Pi-v2 without certificates"
 }
 
 build (){
@@ -23,6 +25,15 @@ setup (){
 	sudo docker container restart garage-pi
 }
 
+verify (){
+	read -p "Are you sure?" -n 1 -r
+	echo    # (optional) move to a new line
+	if [[ ! $REPLY =~ ^[Yy]$ ]]
+		then
+			[[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+	fi
+}
+
 if [ $# -eq 0 ]
 	then
     	print_help
@@ -37,15 +48,26 @@ fi
 
 if [ "$1" == "-distro" ] || [ "$1" == "-d" ]
 	then
+		verify
 		build
 		exit 0
 fi
 
 if [ "$1" == "--setup" ] || [ "$1" == "-s" ]
 	then
+		verify
 		read -p 'Enter your DDNS Domain (e.g. garage-example.dynu.net): ' d
 		read -p 'Enter your email address (this is sent to LetsEncrypt only): ' e
 		build
 		setup
+		exit 0
+fi
+
+if [ "$1" == "--no-cert" ] || [ "$1" == "-n" ]
+	then
+		echo "You will have to import your own certs to the docker containers /code/tls folder"
+		verify
+		build
+		sudo docker run -v /etc/timezone:/etc/timezone --restart=always --device=/dev/mem:/dev/mem --name=garage-pi --privileged --publish 443:443 --publish 80:80 -d bugman000/garage-pi-v2
 		exit 0
 fi

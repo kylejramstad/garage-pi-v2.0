@@ -70,7 +70,6 @@ var auth = function(req, res, next) {
   	}
 };
 
-
 // RPIO PIN Config
 // default: 13-close, 19-open, 11-relay
 // get pins from database when starting up

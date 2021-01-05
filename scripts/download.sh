@@ -1,3 +1,5 @@
+#!/bin/bash
+#To be run by user that just wants to download the docker container
 read -p 'Enter your DDNS Domain (e.g. garage-example.dynu.net): ' d
 read -p 'Enter your email address (this is sent to LetsEncrypt only): ' e
 curl -sSL https://get.docker.com | sh
