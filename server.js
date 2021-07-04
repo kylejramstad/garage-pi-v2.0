@@ -254,7 +254,10 @@ app.post('/settings/assistant', auth, function(req, res){
 app.get('/settings/users', function(req, res){ //does not use the auth() middleware so we can check for first login as well
 	if ((req.session && req.session.admin) || login.isFirst()){ // If logged in or first time user
 		if(req.query.type === 'create'){
-			res.render('userCreate.ejs');
+			if (req.session.csrf === undefined){
+				req.session.csrf = crypto.randomBytes(100).toString('base64');
+			}
+			res.render('userCreate.ejs', {csrf_token:req.session.csrf});
 		}
 		else if(req.query.type === 'delete'){
 			res.render('userDelete.ejs');
@@ -274,26 +277,43 @@ app.get('/settings/users', function(req, res){ //does not use the auth() middlew
 app.post('/settings/users', function(req, res){ //Create the user from the form then redirect the user
 	if ((req.session && req.session.admin) || login.isFirst()){ // If logged in or first time user
 		if(req.query.type === 'create'){
-			var username = req.body.username;
-			if(!login.getUser(username) && username != "first" ){ //Create new user as long as the user doesn't exist 
-				var password = req.body.password;  
-				var password2 = req.body.password2;				  
-				var result = owasp.test(password);
-				if(password == password2){ //must match
-					if(result.strong){ //user made a strong password
-						login.addUser(username,password);
-						res.redirect('/?create=true');
-					}
-					else{ //user made a weak password. Reload the page and show the requirements they didn't meet
-						res.render('userCreate.ejs', {errors: result.errors});
-					}
+			if(req.body.csrf !== req.session.csrf || !req.body.csrf){
+				if (req.session.csrf === undefined){
+							req.session.csrf = crypto.randomBytes(100).toString('base64');
 				}
-				else{//did not match
-					res.render('userCreate.ejs', {errors: ["Passwords Must Match"]});
-				}
+				res.render('userCreate.ejs', {csrf_token:req.session.csrf,errors: ["CSRF Tokens Do Not Match"]});
 			}
-			else{ //User already exists
-				res.render('userCreate.ejs', {exists: true});
+			else{
+				var username = req.body.username;
+				if(!login.getUser(username) && username != "first" ){ //Create new user as long as the user doesn't exist 
+					var password = req.body.password;  
+					var password2 = req.body.password2;				  
+					var result = owasp.test(password);
+					if(password == password2){ //must match
+						if(result.strong){ //user made a strong password
+							login.addUser(username,password);
+							res.redirect('/?create=true');
+						}
+						else{ //user made a weak password. Reload the page and show the requirements they didn't meet
+							if (req.session.csrf === undefined){
+								req.session.csrf = crypto.randomBytes(100).toString('base64');
+							}
+							res.render('userCreate.ejs', {csrf_token:req.session.csrf,errors: result.errors});
+						}
+					}
+					else{//did not match
+						if (req.session.csrf === undefined){
+							req.session.csrf = crypto.randomBytes(100).toString('base64');
+						}
+						res.render('userCreate.ejs', {csrf_token:req.session.csrf,errors: ["Passwords Must Match"]});
+					}
+				}
+				else{ //User already exists
+					if (req.session.csrf === undefined){
+						req.session.csrf = crypto.randomBytes(100).toString('base64');
+					}
+					res.render('userCreate.ejs', {csrf_token:req.session.csrf,exists: true});
+				}
 			}
 		}
 		else if(req.query.type === 'delete'){
