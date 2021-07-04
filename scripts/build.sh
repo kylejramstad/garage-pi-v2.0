@@ -1,4 +1,5 @@
 #!/bin/bash
+#To be run by a user building the docker container
 print_help () {
 	echo "usage: build.sh [options]"
 	echo "	options:"
