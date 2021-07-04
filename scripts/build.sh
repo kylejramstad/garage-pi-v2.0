@@ -21,7 +21,8 @@ setup (){
 	sudo docker exec -i garage-pi sudo rm /code/tls/privkey.pem
 	sudo docker exec -i garage-pi ln -s /etc/letsencrypt/live/$d/fullchain.pem /code/tls/fullchain.pem
 	sudo docker exec -i garage-pi ln -s /etc/letsencrypt/live/$d/privkey.pem /code/tls/privkey.pem
-	sudo crontab -l 2>/dev/null; echo -e  "0 2 * * 3 sudo docker exec -t garage-pi /code/scripts/update.sh && sudo docker container restart garage-pi >/dev/null 2>&1\n*/5 * * * * ~/dynudns/dynu.sh >/dev/null 2>&1" | sudo crontab -
+	sudo docker exec garage-pi crontab /etc/cron.d/certbot
+	sudo crontab -l 2>/dev/null; echo -e  "0 2 * * 3 sudo docker exec -t garage-pi /code/scripts/update.sh && sudo docker container restart garage-pi >/dev/null 2>&1" | sudo crontab -
 	sudo docker container restart garage-pi
 }
 

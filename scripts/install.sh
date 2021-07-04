@@ -17,7 +17,6 @@ sudo apt-get -y install nano
 #Install certbot and cron
 sudo apt-get -y install cron
 sudo apt-get -y install certbot
-sudo crontab -l 2>/dev/null; echo "0 */12 * * * root /usr/bin/certbot renew -w /code/tls >/dev/null 2>&1" | sudo crontab -
 
 # Python and pip
 # This is the biggest part and takes a long time...
