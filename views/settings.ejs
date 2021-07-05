@@ -5,16 +5,21 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="/assets/style.css">
 		<style>
-		.column {
+		.vertical-menu {
 		  float: left;
-		  width: 50%;
+		  margin: 10px;
 		}
-
-		/* Clear floats after the columns */
-		.row:after {
-		  content: "";
-		  display: table;
-		  clear: both;
+		
+		.vertical-menu a {
+		  background-color: #eee;
+		  color: black;
+		  display: block;
+		  padding: 12px;
+		  text-decoration: none;
+		}
+		
+		.vertical-menu a:hover {
+		  background-color: #ccc;
 		}
 		</style>
 	</head>
@@ -27,28 +32,24 @@
 						</form>
 				</div>
 				<h2>Settings</h2>
-				<div class="row">
-				  <div class="column">
-				  	<h3>Users</h3>
-					<ul>
-						<li><a href="/settings/users?type=create">Create New User</a></li>
-						<li><a href="/settings/users?type=delete">Delete a User</a></li>
-						<li><a href="/settings/users?type=change">Change user password</a></li>
-						<li><a href="/settings/assistant">Voice Assistant Setup</a></li>
-					</ul>
-				  </div>
-				  <div class="column">
-				  	<h3>Configuration</h3> 
-					<ul>
-						<li><a href="/settings/logs">Logs</a></li>
-						<li><a href="/settings/timer">Auto Close Timer</a></li>
-						<li><a href="/settings/pins">Raspberry Pi GPIO Pins</a></li>
-						<li><a href="/settings/notification">Push Notifications</a></li>
-					</ul>
-				  </div>
-				</div>
-	
-				<div style="text-align:center">    
+
+					<div class="vertical-menu">
+				  		<h3>Users</h3>
+						<a href="/settings/users?type=create">Create New User</a>
+						<a href="/settings/users?type=delete">Delete a User</a>
+						<a href="/settings/users?type=change">Change user password</a>
+						<a href="/settings/assistant">Voice Assistant Setup</a>
+					</div>
+					<div class="vertical-menu">
+						<h3>Configuration</h3>
+						<a href="/settings/logs">Logs</a>
+						<a href="/settings/timer">Auto Close Timer</a>
+						<a href="/settings/pins">Raspberry Pi GPIO Pins</a>
+						<a href="/settings/notification">Push Notifications</a>
+					</div>
+				
+				<div style="text-align:center;clear:both;">    
+					<br>
 					<a target="_blank" href="https://github.com/kylejramstad/garage-pi-v2">Visit This Project on Github</a>
 					<br>
 					<%if(typeof version != "undefined"){%>
