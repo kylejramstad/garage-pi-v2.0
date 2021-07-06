@@ -6,32 +6,32 @@ const db = new JSONdb('./databases/notification.json');
 
 var sendAutoClose = function(time){
 	var data = JSON.stringify({
-	  value1: time
+		value1: time
 	})
 	
 	var key = db.get('key');
 	
 	var newPath = '/trigger/Auto_Close/with/key/'+key;
 	var options = {
-	  hostname: 'maker.ifttt.com',
-	  port: 443,
-	  path: newPath,
-	  method: 'POST',
-	  headers: {
-		'Content-Type': 'application/json',
-		'Content-Length': data.length
-	  }
+		hostname: 'maker.ifttt.com',
+		port: 443,
+		path: newPath,
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'Content-Length': data.length
+		}
 	}
 	
 	var req = https.request(options, (res) => {
 		console.log(`statusCode: ${res.statusCode}`)
 		res.on('data', (d) => {
 			process.stdout.write(d)
-		  })
+		})
 	})
 	
 	req.on('error', (error) => {
-	  console.error(error)
+		console.error(error)
 	})
 
 	req.write(data)
@@ -40,33 +40,33 @@ var sendAutoClose = function(time){
 
 var sendOpenClose = function(openClose, user){
 	var data = JSON.stringify({
-	  value1: user,
-	  value2: openClose
+		value1: user,
+		value2: openClose
 	})
 	
 	var key = db.get('key');
 	
 	var newPath = '/trigger/Open_Close/with/key/'+key;
 	var options = {
-	  hostname: 'maker.ifttt.com',
-	  port: 443,
-	  path: newPath,
-	  method: 'POST',
-	  headers: {
-		'Content-Type': 'application/json',
-		'Content-Length': data.length
-	  }
+		hostname: 'maker.ifttt.com',
+		port: 443,
+		path: newPath,
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'Content-Length': data.length
+		}
 	}
 	
 	var req = https.request(options, (res) => {
 		console.log(`statusCode: ${res.statusCode}`)
 		res.on('data', (d) => {
 			process.stdout.write(d)
-		  })
+		})
 	})
 	
 	req.on('error', (error) => {
-	  console.error(error)
+		console.error(error)
 	})
 
 	req.write(data)
@@ -78,7 +78,7 @@ var setIFTTTKey = function(key){
 	db.sync();
 }
 
-var getIFTTTKey = function(key){
+var getIFTTTKey = function(){
 	return db.get('key');
 }
 
@@ -97,15 +97,15 @@ var setButton = function(onOff){
 	db.sync();
 }
 
-var getAuto = function(onOff){
+var getAuto = function(){
 	return db.get('auto');
 }
 
-var getOpenClose = function(onOff){
+var getOpenClose = function(){
 	return db.get('openClose');
 }
 
-var getButton = function(onOff){
+var getButton = function(){
 	return db.get('button');
 }
 

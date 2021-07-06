@@ -1,7 +1,6 @@
 'use strict';
 
 const bodyParser = require('body-parser');
-const crypto = require('crypto');
 const express = require('express');
 const favicon = require('express-favicon');
 const session = require('express-session');
