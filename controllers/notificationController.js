@@ -1,3 +1,5 @@
+'use strict';
+
 const https = require('https')
 const JSONdb = require('simple-json-db');
 const db = new JSONdb('./databases/notification.json');
@@ -107,4 +109,49 @@ var getButton = function(onOff){
 	return db.get('button');
 }
 
-module.exports = {sendAutoClose,sendOpenClose,setIFTTTKey,getIFTTTKey,setAuto,setOpenClose,setButton,getAuto,getOpenClose,getButton}
+var autoOnOff = getAuto();
+var userOnOff = getOpenClose();
+var buttonOnOff = getButton();
+var iftttKey = getIFTTTKey();
+
+const notificationGet = function(req, res){
+	autoOnOff = getAuto();
+	userOnOff = getOpenClose();
+	buttonOnOff = getButton();
+	iftttKey = getIFTTTKey()
+	
+	res.render('notification.ejs', {autoCloseSwitch:autoOnOff,userCloseSwitch:userOnOff,buttonCloseSwitch:buttonOnOff,key:iftttKey});
+};
+
+const notificationPost = function(req, res){
+	if(req.body.autoClose == "on"){
+		autoOnOff = "on";
+	}
+	else{ //switch is off
+		autoOnOff = "off";
+	}
+	if(req.body.userClose == "on"){
+		userOnOff = "on";
+	}
+	else{ //switch is off
+		userOnOff = "off";	
+	}
+	if(req.body.buttonClose == "on"){
+		buttonOnOff = "on";
+	}
+	else{ //switch is off
+		buttonOnOff = "off";
+	}
+	
+	iftttKey = req.body.key;
+	
+	setIFTTTKey(iftttKey);
+	setAuto(autoOnOff);
+	setOpenClose(userOnOff);
+	setButton(buttonOnOff);
+
+	res.render('notification.ejs', {success:true,autoCloseSwitch:autoOnOff,userCloseSwitch:userOnOff,buttonCloseSwitch:buttonOnOff,key:iftttKey});
+};
+
+
+module.exports = {notificationGet,notificationPost,sendAutoClose,sendOpenClose,getAuto,getOpenClose,getButton,getIFTTTKey}
