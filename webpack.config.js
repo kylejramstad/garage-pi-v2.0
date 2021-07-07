@@ -1,5 +1,6 @@
 
 module.exports = {
+  mode: 'production',
   entry: [
     './entry.js'
   ],
