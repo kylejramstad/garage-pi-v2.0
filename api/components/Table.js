@@ -10,10 +10,8 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
 
 const useStyles1 = makeStyles(theme => ({
   root: {
@@ -27,14 +25,14 @@ const useStyles1 = makeStyles(theme => ({
 function TablePaginationActions(props) {
   const classes = useStyles1();
   const theme = useTheme();
-  const { count, page, rowsPerPage, onChangePage } = props;
+  const { count, page, rowsPerPage, onPageChange } = props;
 
   const handleBackButtonClick = event => {
-    onChangePage(event, page - 1);
+    onPageChange(event, page - 1);
   };
 
   const handleNextButtonClick = event => {
-    onChangePage(event, page + 1);
+    onPageChange(event, page + 1);
   };
 
 
@@ -79,12 +77,13 @@ const useStyles2 = makeStyles({
   },
 });
 
-const CustomPaginationActionsTable = (props) => {
-  let { rows } = props;
-	   
+
+export default function CustomPaginationActionsTable(props) {
+  let rows = props.rows;
+
   const classes = useStyles2();
   const font = '0.5rem';
-  
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -94,15 +93,15 @@ const CustomPaginationActionsTable = (props) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
   return (
     <TableContainer component={Paper}>
-      <Table size="small" className={classes.table} aria-label="custom pagination table">
-        <TableBody>
+      <Table size="small" className={classes.table} aria-label="log table">
+      <TableBody>
         <TableRow>
         	<TableCell className={classes.tableHead}>{'Open/Close'}</TableCell>
         	<TableCell className={classes.tableHead}>{'User'}</TableCell>
@@ -134,14 +133,14 @@ const CustomPaginationActionsTable = (props) => {
                 native: true,
                 style:{
                   marginLeft: '0px',
-    			  marginRight: '0px',
+				  marginRight: '0px',
                   fontSize: font
                 }
               }}
               labelRowsPerPage={<div style={{fontSize:font}}>{'Rows per Page:'}</div>}
               labelDisplayedRows={row => <div style={{fontSize: font}}>{page * rowsPerPage+1 +'-'+((page * rowsPerPage) + rowsPerPage) + ' of ' + rows.length}</div>}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
             />
           </TableRow>
@@ -150,4 +149,3 @@ const CustomPaginationActionsTable = (props) => {
     </TableContainer>
   );
 }
-export default CustomPaginationActionsTable
