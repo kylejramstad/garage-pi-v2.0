@@ -9,7 +9,9 @@ apt-get update
 apt-get -y install sudo
 
 # Time settings
-sudo apt-get -y install tzdata
+sudo ln -snf /usr/share/zoneinfo/$(curl https://ipapi.co/timezone) /etc/localtime
+sudo apt-get install -y tzdata
+sudo dpkg-reconfigure --frontend noninteractive tzdata
 
 # install nano for crontab editing
 sudo apt-get -y install nano
