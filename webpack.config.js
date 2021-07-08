@@ -1,12 +1,20 @@
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   mode: 'production',
+  optimization: {
+  	splitChunks: {
+  		chunks: 'all',
+  	},
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  },
   entry: [
     './entry.js'
   ],
   output: {
     path: __dirname + '/assets',
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   module: {
     rules: [

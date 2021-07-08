@@ -5,7 +5,7 @@ const fs = require('fs');
 
 function getScripts(){
 	var startPath = "/code/assets";
-	var filter = "bundle.js"
+	var filter = ".js"
     var results = [];
 
     if (!fs.existsSync(startPath)){
