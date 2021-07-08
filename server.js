@@ -7,9 +7,8 @@ const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 const fs = require('fs');
 const helmet = require('helmet');
-const https = require('https');
-const http = require('http');
 const nocache = require("nocache");
+const spdy = require('spdy');
 
 const databaseController = require('./controllers/databaseController.js');
 
@@ -62,12 +61,12 @@ app.use(function(req, res, next){
 });
 
 //Start HTTP App
-http.createServer(app).listen(80, () => {
+spdy.createServer(app).listen(80, () => {
   console.log('Listening...');
 });
 
 //Start App with HTTPS
-https.createServer({
+spdy.createServer({
   key: fs.readFileSync('tls/privkey.pem'),
   cert: fs.readFileSync('tls/fullchain.pem')
 }, app).listen(443, () => {
