@@ -12,6 +12,7 @@ export default class LogContainer extends Component{
 	}
 	
 	componentDidMount() {
+		this.updateRows();
 		this.interval = setInterval(() => this.updateRows(), 1000);
 	}
 	componentWillUnmount() {

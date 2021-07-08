@@ -16,7 +16,8 @@ class GarageContainer extends Component {
      }
 
 componentDidMount() {
-  this.interval = setInterval(() => this.updateStatus(), 1000);
+	this.updateStatus();
+	this.interval = setInterval(() => this.updateStatus(), 1000);
 }
 componentWillUnmount() {
   clearInterval(this.interval);
