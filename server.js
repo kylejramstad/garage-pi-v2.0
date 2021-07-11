@@ -60,11 +60,6 @@ app.use(function(req, res, next){
 	res.status(404).redirect('/');
 });
 
-//Start HTTP App
-spdy.createServer(app).listen(80, () => {
-  console.log('Listening...');
-});
-
 //Start App with HTTPS
 spdy.createServer({
   key: fs.readFileSync('tls/privkey.pem'),

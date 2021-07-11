@@ -1,79 +1,71 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 
 import GarageState from '../components/GarageState'
 import GarageButton from '../components/GarageButton'
 
 class GarageContainer extends Component {
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
-    this.state = { garageState: '' };
+		this.state = { garageState: '' };
 
-    this.updateStatus = this.updateStatus.bind(this);
-    this.sendRelay = this.sendRelay.bind(this);
-    this.getGarageStatus = this.getGarageStatus.bind(this);
-     }
+		this.eventSource = new EventSource("status");
 
-componentDidMount() {
-	this.updateStatus();
-	this.interval = setInterval(() => this.updateStatus(), 1000);
-}
-componentWillUnmount() {
-  clearInterval(this.interval);
-}
+		this.sendRelay = this.sendRelay.bind(this);
+		this.getGarageStatus = this.getGarageStatus.bind(this);
+	}
 
-  updateStatus() {
-    axios.get('/status')
-      .then(res => {
-        this.setState({ garageState: res.data });
-//	console.log(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  }
+	componentDidMount() {
+		this.eventSource.onmessage = function(event){
+			this.setState(JSON.parse(event.data));
+		}.bind(this);
+		
+		this.eventSource.addEventListener("closedConnection", e =>
+		  this.stopUpdates()
+		);
+	}
+	
+	stopUpdates(){
+		this.eventSource.close();
+	}
 
-  sendRelay() {
-    axios.get('/relay')
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  }
+	sendRelay(){
+		const Http = new XMLHttpRequest();
+		const url='/relay';
+		Http.open("GET", url);
+		Http.send();
+	}
 
-  getGarageStatus() {
-    let { garageState } = this.state;
+	getGarageStatus() {
+		let { garageState } = this.state;
 
-    if (!garageState) {
-      return 'Loading...';
-    }
-    
-    if (garageState.open && garageState.close){
-      return 'Garage Door Fell Off!!!!';
-    } else if (garageState.open) {
-      return 'Open';
-    } else if (garageState.close) {
-      return 'Closed';
-    } else {
-      return 'Partially open';
-    }
-  }
+		if (!garageState) {
+			return 'Loading...';
+		}
 
-  render() {
-    let { garageState } = this.state;
+		if (garageState.open && garageState.close){
+			return 'Garage Door Fell Off!!!!';
+		} else if (garageState.open) {
+			return 'Open';
+		} else if (garageState.close) {
+			return 'Closed';
+		} else {
+			return 'Partially open';
+		}
+	}
 
-    return (
-      <div>
-        <GarageState getGarageStatus={this.getGarageStatus} />
-        <GarageButton 
-          buttonText={garageState.open ? 'Close' : 'Open'}
-          sendRelay={this.sendRelay} />
-      </div>
-    )
-  }
+	render() {
+		let { garageState } = this.state;
+
+		return (
+			<div>
+				<GarageState getGarageStatus={this.getGarageStatus} />
+				<GarageButton 
+					buttonText={garageState.open ? 'Close' : 'Open'}
+					sendRelay={this.sendRelay} />
+			</div>
+		)
+	}
 }
 
 export default GarageContainer

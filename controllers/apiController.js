@@ -7,13 +7,63 @@ const rpio = require('rpio');
 const loginController = require('./loginController.js');
 const crypto = require('crypto');
 
-const status = function(req, res) { //For the react components to read the GPIO PINS
-  res.send(JSON.stringify(pinsController.getState()));
-}
+const status = function (req, res){
+	res.writeHead(200, {
+		Connection: 'keep-alive',
+		'Content-Encoding': 'none',
+		'Cache-Control': 'no-cache',
+		'Content-Type': 'text/event-stream',
+  	});
+	
+	var startStatus = pinsController.getState();
+	var data = {"garageState":startStatus};
+	res.write('data: '+ JSON.stringify(data)+'\n\n');
 
-const logs = function(req, res) { //For the react components to read the logs
-  res.send(JSON.stringify(log.getLogs().reverse()));
-}
+	var interval = setInterval(function(){
+		var newStatus = pinsController.getState();
+		if(JSON.stringify(startStatus) != JSON.stringify(newStatus)){
+			var data = {"garageState":newStatus};
+			res.write('data: '+ JSON.stringify(data)+'\n\n');
+			startStatus = pinsController.getState();
+		}
+	},100);
+        
+    res.on('close', () => {
+	    clearInterval(interval);
+		res.write("event: closedConnection\n");
+		res.write("data: ");
+		res.write("\n\n");
+		res.end();
+    });
+};
+
+const logs = function (req, res){
+	res.writeHead(200, {
+		Connection: 'keep-alive',
+		'Content-Encoding': 'none',
+		'Cache-Control': 'no-cache',
+		'Content-Type': 'text/event-stream',
+  	});
+
+	var startData = {rows:log.getLogs().reverse()};
+	res.write('data: '+ JSON.stringify(startData)+'\n\n');
+	
+	var interval = setInterval(function(){
+		var newData = {rows:log.getLogs().reverse()};
+		if(JSON.stringify(startData) != JSON.stringify(newData)){
+			res.write('data: '+ JSON.stringify(newData)+'\n\n');
+			startData = {rows:log.getLogs().reverse()};
+		}
+	},100);
+        
+    res.on('close', () => {
+    	clearInterval(interval)
+		res.write("event: closedConnection\n");
+		res.write("data: ");
+		res.write("\n\n");
+		res.end();
+    });
+};
 
 var userOnOff = notificationController.getOpenClose();
 var buttonOnOff = notificationController.getButton();
@@ -79,7 +129,7 @@ function buttonCheck(){
 			}
 		}
 		startState = pinsController.getState();
-	},100);
+	},500);
 }
 
 const assistant = function(req, res) { //Google Assistant API Call. Used with IFTTT

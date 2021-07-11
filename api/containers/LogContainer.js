@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios'
 
 import Table from '../components/Table'
 
@@ -8,25 +7,22 @@ export default class LogContainer extends Component{
 	constructor() {
 		super();
 		this.state = {rows: []};
-		this.updateRows = this.updateRows.bind(this);
+		
+		this.eventSource = new EventSource("logs");
 	}
 	
 	componentDidMount() {
-		this.updateRows();
-		this.interval = setInterval(() => this.updateRows(), 1000);
-	}
-	componentWillUnmount() {
-		clearInterval(this.interval);
+		this.eventSource.onmessage = function(event){
+			this.setState(JSON.parse(event.data));
+		}.bind(this);
+		
+		this.eventSource.addEventListener("closedConnection", e =>
+		  this.stopUpdates()
+		);
 	}
 	
-	updateRows() {
-		axios.get('/logs')
-			.then(res => {
-				this.setState({ rows: res.data });
-			})
-			.catch(err => {
-				console.log(err);
-			})
+	stopUpdates(){
+		this.eventSource.close();
 	}
 	
 	render() {
