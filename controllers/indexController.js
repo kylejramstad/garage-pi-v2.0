@@ -20,7 +20,7 @@ function getScripts(){
         if (stat.isDirectory()){
             //results = results.concat(findFilesInDir(filename,filter)); //recurse
         }
-        else if (filename.indexOf(filter)>=0) {
+        else if (filename.indexOf(filter)>=0 && filename.slice(-2) == 'js') {
             //console.log('-- found: ',filename);
             filename = filename.slice(5);
             results.push(filename);
