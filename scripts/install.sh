@@ -9,6 +9,7 @@ apt-get update
 apt-get -y install sudo
 
 # Time settings
+apt-get -y install curl
 sudo ln -snf /usr/share/zoneinfo/$(curl https://ipapi.co/timezone) /etc/localtime
 sudo apt-get install -y tzdata
 sudo dpkg-reconfigure --frontend noninteractive tzdata
