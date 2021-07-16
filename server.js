@@ -7,6 +7,7 @@ const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 const fs = require('fs');
 const helmet = require('helmet');
+const http = require('http');
 const nocache = require("nocache");
 const spdy = require('spdy');
 
@@ -58,6 +59,11 @@ app.use(express.static(__dirname + '/tls', { dotfiles: 'allow' } )); //Allows fo
 //To catch all false routes and redirect them back to the home page
 app.use(function(req, res, next){
 	res.status(404).redirect('/');
+});
+
+//Start HTTP Server for TLS verification
+http.createServer(app).listen(80, () => {
+  console.log('Listening...');
 });
 
 //Start App with HTTPS
