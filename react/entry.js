@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Garage from './api/Garage'
-import Log from './api/Log'
+import Garage from './Garage'
+import Log from './Log'
 
 // Entry point to the app. Written this way for easy extendability.
 ReactDOM.render(

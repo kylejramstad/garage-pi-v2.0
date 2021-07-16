@@ -10,7 +10,7 @@ module.exports = {
     minimizer: [new TerserPlugin()],
   },
   entry: [
-    './entry.js'
+    './react/entry.js'
   ],
   output: {
     path: __dirname + '/assets',
