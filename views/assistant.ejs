@@ -20,30 +20,27 @@
 			<%if(typeof username != "undefined" && typeof password != "undefined"){%>
 			<div class="content">
 				<p>These instructions are unique to you. <strong>DO NOT SHARE!!!</strong></p>
+				<p>You cannot retrieve the information on this page again. If you make a mistake you will have to start over.</p>
 				<ul style="font-size:0.75em">
 					<li>Create a new applet on <a href="https://ifttt.com/create" target="_blank">IFTTT</a></li>
-					<li>For "This", select Google Assistant or Amazon Alexa</li>
-					<li>Choose "Say a simple phrase"</li>
-					<li>Enter the following information:</li>
-					<ul>
-						<li>"What do you want to say?": Open the garage</li>
-						<li>"What do you want the Assistant to say in response?": Opening the garage</li>
-					</ul>
+					<li>For "This", select Google Assistant V2 or Amazon Alexa</li>
+					<li>Choose "Activate Scene" for Google Assistant or "Say a specific phrase" for Amazon Alexa</li>
+					<li>Enter the required information</li>
 					<li>Click "Create Trigger"</li>
 					<li>For "That", select Webhooks</li>
 					<li>Choose "Make a web request"</li>
 					<li>Enter the following information:</li>
 					<ul>
-						<li>"URL"<br>https://&lt;YOUR DOMAIN&gt;/assistant?open=true&username=<%= username %>&password=<%= password %>&time={{CreatedAt}}</li>
+						<li>"URL"<br>https://&lt;YOUR DOMAIN&gt;/assistant?open=true&username=<%= username %>&password=<%= password %></li>
 						<li>NOTE: THIS URL IS UNIQUE TO YOUR GARAGE-PI!</li>
-						<li>NOTE: Make sure you replace the ip address with your own!</li>
+						<li>NOTE: Make sure you replace the domain/ip address with your own!</li>
 					</ul>
 					<li>Leave everything else the same</li>
 					<li>Save your applet and create a new applet for closing the garage<br>using "close" instead of "open" in the trigger and url</li>
 					<ul>
-						<li>"URL"<br>https://&lt;YOUR DOMAIN&gt;/assistant?close=true&username=<%= username %>&password=<%= password %>&time={{CreatedAt}}</li>
+						<li>"URL"<br>https://&lt;YOUR DOMAIN&gt;/assistant?close=true&username=<%= username %>&password=<%= password %></li>
 						<li>NOTE: THIS URL IS UNIQUE TO YOUR GARAGE-PI!</li>
-						<li>NOTE: Make sure you replace the ip address with your own!</li>
+						<li>NOTE: Make sure you replace the domain/ip address with your own!</li>
 					</ul>
 				</ul>
 				</div>

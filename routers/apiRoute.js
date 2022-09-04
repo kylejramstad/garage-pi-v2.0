@@ -10,6 +10,6 @@ const controller = require('../controllers/apiController.js');
 router.get('/status', auth.auth, controller.status);
 router.get('/logs', auth.auth, controller.logs);
 router.get('/relay', auth.auth, controller.relay);
-router.get('/assistant', auth.auth, controller.assistant);
+router.get('/assistant', controller.assistant);
 
 module.exports = router;

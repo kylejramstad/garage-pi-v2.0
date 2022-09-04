@@ -20,6 +20,7 @@ sudo apt-get -y install nano
 #Install certbot and cron
 sudo apt-get -y install cron
 sudo apt-get -y install certbot
+sudo service cron start 
 
 # Python and pip
 # This is the biggest part and takes a long time...

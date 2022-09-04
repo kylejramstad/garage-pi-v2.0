@@ -133,30 +133,21 @@ function buttonCheck(){
 }
 
 const assistant = function(req, res) { //Google Assistant API Call. Used with IFTTT
-	var createdAt = req.query.time; //Get time the command was created at
-	createdAt = createdAt.replace(",", "");
-	createdAt = createdAt.replace("at", "\b");
-	createdAt = createdAt.slice(0, -2) + " " + createdAt.slice(-2);
-	var date = new Date(createdAt);
-	var minutes = date.getMinutes();
-	
-	if (minutes == new Date().getMinutes()){
-		var username = req.query.username;
-		if(loginController.getUser(username)){
-			var password = req.query.password;
-			var salt = loginController.getUser(username).salt;
-			var hash = crypto.pbkdf2Sync(password, salt+username, 100000, 64, `sha512`).toString(`hex`);
-			if(loginController.getUser(username).hash == hash && ((req.query.open && pinsController.getState().close)||(req.query.close && pinsController.getState().open))){
-			
-				if(req.query.close){
-					log.addLog("Close",username);	
-				}
-				else if(req.query.open){
-					log.addLog("Open",username);	
-				}
-	
-				buttonPress();
+	var username = req.query.username;
+	if(loginController.getUser(username)){
+		var password = req.query.password;
+		var salt = loginController.getUser(username).salt;
+		var hash = crypto.pbkdf2Sync(password, salt+username, 100000, 64, `sha512`).toString(`hex`);
+		if(loginController.getUser(username).hash == hash && ((req.query.open && pinsController.getState().close)||(req.query.close && pinsController.getState().open))){
+		
+			if(req.query.close){
+				log.addLog("Close",username);	
 			}
+			else if(req.query.open){
+				log.addLog("Open",username);	
+			}
+
+			buttonPress();
 		}
 	}
 	res.end();
