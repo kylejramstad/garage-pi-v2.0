@@ -3,7 +3,7 @@
 const pinsController = require('./pinsController.js');
 const log = require('./logController.js');
 const notificationController = require('./notificationController.js');
-const rpio = require('rpio');
+const gpiox = require("@iiot2k/gpiox");
 const loginController = require('./loginController.js');
 const crypto = require('crypto');
 
@@ -97,9 +97,9 @@ const relay = function(req, res) {   //Open or Close garage with the relay
 
 function buttonPress(){
 	clearInterval(check); //Stop checking for button because this was not a button push
-	rpio.write(pinsController.getRelayPin(), rpio.LOW);
+	pinsController.writePin(pinsController.getRelayPin(), 0);
 	setTimeout(function() {
-		rpio.write(pinsController.getRelayPin(), rpio.HIGH);
+		pinsController.writePin(pinsController.getRelayPin(), 1);
 		buttonCheck(); //Start checking again
 	}, 1000);
 }

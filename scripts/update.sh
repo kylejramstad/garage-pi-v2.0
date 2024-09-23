@@ -15,7 +15,7 @@ done
 
 # Installs all new modules in package.json and checks for security issues and fix them
 sudo npm install
-sudo npm update
+sudo npm update --depth 5
 sudo npm audit fix --force
 
 # Run webpack so that the bundle.js can be created if needed

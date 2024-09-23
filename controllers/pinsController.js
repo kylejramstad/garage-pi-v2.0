@@ -1,6 +1,6 @@
 const JSONdb = require('simple-json-db');
 const db = new JSONdb('./databases/pins.json');
-const rpio = require('rpio');
+const gpiox = require("@iiot2k/gpiox");
 
 const pinsGet = function(req, res) {
 	openPinNum = getOpenPin();
@@ -9,14 +9,43 @@ const pinsGet = function(req, res) {
 	res.render('pins.ejs', {open:openPinNum,close:closePinNum,relay:relayPinNum});
 };
 
+//Physical Pins to GPIO Pins
+//GPIOX uses GPIO Pins and Garage-Pi uses physical pins
+const pins = {
+    3:2,
+	5:3,
+	7:4,
+	8:14,
+	10:15,
+	11:17,
+	12:18,
+	13:27,
+	15:22,
+	16:23,
+	18:24,
+	19:10,
+	21:9,
+	22:25,
+	23:11,
+	24:8,
+	26:7,
+	29:5,
+	31:6,
+	32:12,
+	33:13,
+	35:19,
+	36:16,
+	37:26,
+	38:20,
+	40:21
+};
+
 const pinsPost = function(req, res){
 	var open = parseInt(req.body.open,10)
 	var close = parseInt(req.body.close,10)
 	var relay = parseInt(req.body.relay,10)
 	
-	var validPins = [3,5,7,8,10,11,12,13,15,16,18,19,21,22,23,24,26,29,31,32,33,35,36,37,38,40];
-	
-	if(validPins.includes(open) && validPins.includes(close) && validPins.includes(relay)){
+	if(open in pins && close in pins && relay in pins){
 		setPins(open,close,relay);
 		startPins();
 		res.render('pins.ejs', {success:true,open:openPinNum,close:closePinNum,relay:relayPinNum});
@@ -66,10 +95,14 @@ function startPins(){
 	openPin = process.env.OPEN_PIN || openPinNum;
 	closePin = process.env.CLOSE_PIN || closePinNum;
 	relayPin = process.env.RELAY_PIN || relayPinNum;
-		
-	rpio.open(openPin, rpio.INPUT, rpio.PULL_UP);
-	rpio.open(closePin, rpio.INPUT, rpio.PULL_UP);
-	rpio.open(relayPin, rpio.OUTPUT, rpio.HIGH);
+
+	gpiox.init_gpio(pins[openPin], gpiox.GPIO_MODE_INPUT_PULLUP, 0);
+	gpiox.init_gpio(pins[closePin], gpiox.GPIO_MODE_INPUT_PULLUP, 0);
+	gpiox.init_gpio(pins[relayPin], gpiox.GPIO_MODE_OUTPUT, 1);
+}
+
+function writePin(pin, value){
+	gpiox.set_gpio(pins[pin], value);
 }
 
 function setPins(open,close,relay){
@@ -80,9 +113,9 @@ function setPins(open,close,relay){
 
 function getState() {
   return {
-	open: !rpio.read(openPin),
-	close: !rpio.read(closePin)
+	open: gpiox.get_gpio(pins[openPin]),
+	close: gpiox.get_gpio(pins[closePin])
   }
 }
 
-module.exports = {pinsGet,pinsPost,getState,getRelayPin}
+module.exports = {pinsGet,pinsPost,getState,getRelayPin,writePin}
