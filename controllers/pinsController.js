@@ -96,8 +96,8 @@ function startPins(){
 	closePin = process.env.CLOSE_PIN || closePinNum;
 	relayPin = process.env.RELAY_PIN || relayPinNum;
 
-	gpiox.init_gpio(pins[openPin], gpiox.GPIO_MODE_INPUT_PULLUP, 0);
-	gpiox.init_gpio(pins[closePin], gpiox.GPIO_MODE_INPUT_PULLUP, 0);
+	gpiox.init_gpio(pins[openPin], gpiox.GPIO_MODE_INPUT_PULLUP, 1);
+	gpiox.init_gpio(pins[closePin], gpiox.GPIO_MODE_INPUT_PULLUP, 1);
 	gpiox.init_gpio(pins[relayPin], gpiox.GPIO_MODE_OUTPUT, 1);
 }
 
